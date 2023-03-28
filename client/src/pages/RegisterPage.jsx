@@ -1,37 +1,47 @@
-import React, { useState } from "react"
+import React, { useState } from "react";
 import {Link, Navigate} from "react-router-dom";
+import axios from "axios";
 
 export default function RegisterPage() {
-    const [email, setEmail] = useState('')
-    const [pass, setPass] = useState('')
     const [name, setName] = useState('')
+    const [email, setEmail] = useState('')
+    const [password, setPassword] = useState('')
 
 
-    const handleSubmit = (e) => {
-        e.preventDefault();
-        console.log(email);
+    async function registerUser(ev) {
+         ev.preventDefault();
+         try {
+           await axios.post('/api/register', {
+             name,
+             email,
+             password,
+           });
+           alert('Registration successful. Now you can log in');
+         } catch (e) {
+           alert('Registration failed. Maybe the email is already in use');
+         }
     }
 
     return (
         <div className="auth-form-container">
             <h2>Register</h2>
-            <form className="register-form" onSubmit={handleSubmit}>
+            <form className="register-form" onSubmit={registerUser}>
                 <label htmlFor="name">Full name</label>
                 <input type="name"
                     placeholder="Full name"
                     value={name}
-                    onChange={(e) => setEmail(e.target.value)} />
+                    onChange={(ev) => setName(ev.target.value)} />
                 <label htmlFor="email">email</label>
                 <input type="email"
                     placeholder="youremail@gmail.com"
                     value={email}
-                    onChange={(e) => setEmail(e.target.value)} />
+                    onChange={(ev) => setEmail(ev.target.value)} />
                 <label htmlFor="password">password</label>
                 <input type="password"
                     placeholder="********"
-                    value={pass}
-                    onChange={(e) => setPass(e.target.value)} />
-                <button type="submit">Log In</button>
+                    value={password}
+                    onChange={(ev) => setPassword(ev.target.value)} />
+                <button type="submit">Register</button>
             </form>
             <div className="text-center py-2 text-gray-500">
                 Already have an account? <Link className="link" to={'/login'}>Login Here.</Link>

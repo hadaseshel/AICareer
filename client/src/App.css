@@ -49,3 +49,37 @@ button {
   color: white;
   text-decoration: underline;
 }
+
+
+.header {
+  background-color: #fff;
+  padding: 15px;
+  box-shadow: 0 0 3px #000;
+}
+
+.headerLinkLeft {
+  display: inline;
+  padding-left: 45px;
+  color: #fff;
+  background-color: #7439db;
+  border-radius: 30px;
+  float: left;
+  position: relative;
+  top: -15px;
+}
+
+.headerLinkRight {
+  display: flex;
+  padding-left: 45px;
+  color: #fff;
+  background-color: #7439db;
+  border-radius: 30px;
+  float: right;
+  position: relative;
+  top: -15px;
+}
+
+.acountLogo {
+  display: inline-block;
+  padding-left: 45px;
+}
