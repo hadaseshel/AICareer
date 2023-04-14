@@ -1,11 +1,11 @@
-.App {
+/*.App {
   text-align: center;
   display: flex;
   min-height: 100vh;
   align-items: center;
   justify-content: center;
   color: white;
-  background-image: linear-gradient(79deg, #7439db, #c66fbc 48%, #f7944d);
+  background-image: linear-gradient(79deg, #7439db, #eba6a6 48%, #ea7aa5);
 }
 
 .auth-form-container, .login-form, .register-form {
@@ -82,4 +82,4 @@ button {
 .acountLogo {
   display: inline-block;
   padding-left: 45px;
-}
+} */
