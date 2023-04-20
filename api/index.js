@@ -29,13 +29,14 @@ app.get('/test', (req, res) => {
 // register post request
 app.post('/api/register', async (req,res) => {
     mongoose.connect(process.env.MONGO_URL);
-    const {name,email,password} = req.body;
+    const {name,email,password,type} = req.body;
   
     try {
       const userDoc = await User.create({
         name,
         email,
         password:bcrypt.hashSync(password, bcryptSalt),
+        type
       });
       res.json(userDoc);
     } catch (e) {
@@ -74,8 +75,8 @@ app.get('/api/profile', (req,res) => {
     if (token) {
       jwt.verify(token, jwtSecret, {}, async (err, userData) => {
         if (err) throw err;
-        const {name,email,_id} = await User.findById(userData.id);
-        res.json({name,email,_id});
+        const {name,email,type,_id,} = await User.findById(userData.id);
+        res.json({name,email,type,_id});
       });
     } else {
       res.json(null);

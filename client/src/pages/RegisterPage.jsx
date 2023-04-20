@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import {Link, Navigate} from "react-router-dom";
+import {Link} from "react-router-dom";
 import axios from "axios";
 
 export default function RegisterPage() {
@@ -15,6 +15,7 @@ export default function RegisterPage() {
              name,
              email,
              password,
+             type:'normal'
            });
            alert('Registration successful. Now you can log in');
          } catch (e) {
