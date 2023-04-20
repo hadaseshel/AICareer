@@ -3,7 +3,8 @@ import './App.css';
 import LoginPage from './pages/LoginPage';
 import RegisterPage from './pages/RegisterPage';
 import HomePage from './pages/HomePage';
-import ProfilePage from "./pages/ProfilePage.jsx";
+import ProfilePage from "./pages/ProfilePage";
+import AdminPage from './pages/AdminPage';
 import {Route, Routes} from "react-router-dom";
 import axios from "axios";
 import {UserContextProvider} from "./UserContext";
@@ -27,6 +28,7 @@ function App() {
             <Route path="/login" element={<LoginPage />} />
             <Route path="/register" element={<RegisterPage />} />
             <Route path="/account" element={<ProfilePage />} />
+            <Route path="/admin" element={<AdminPage />} />
           </Route>   
         </Routes>
       </UserContextProvider>
