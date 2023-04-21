@@ -88,6 +88,11 @@ app.post('/api/logout', (req,res) => {
     res.cookie('token', '').json(true);
 });
   
-  
+// get number of users
+// app.get('/api/users', async (req, res) => {
+//   mongoose.connect(process.env.MONGO_URL);
+//   const numberOfUsers = await User.collection.countDocuments({}, { hint: "_id_" });
+//   res.json(numberOfUsers);
+// }); 
 
 app.listen(4000);
