@@ -18,3 +18,17 @@ button.primary{
     background-color: #ca3c9f;
     @apply p-2 w-full text-black rounded-2xl;
 }
+
+.custom-link {
+    color: inherit;
+    text-decoration: none;
+}
+
+.custom-link:hover {
+    color:rgb(38, 156, 71);
+    text-decoration: none;
+}
+
+.countNumber{
+    color:rgb(38, 156, 71);
+}
