@@ -4,24 +4,57 @@ import { useRef, useEffect } from "react";
 import {useContext, useState} from "react";
 import axios from "axios";
 import ScrollTrigger from 'react-scroll-trigger'
+
 export default function HomePage() {
-    const [numberOfUsers, setNumberOfUsers] = useState(0)
-    const numberOfOccupation = 100;
-    const numberOfQuestions = 48;
+    const [numberOfUsers, setNumberOfUsers] = useState(0);
+    const [numberOfOccupations, setNumberOfOccupations] = useState(0);
+    const [numberOfQuestions, setNumberOfQuestions] = useState(0);
     const [counterOn, setCounterOn]= useState(false);
 
 
-    // async function getData() {
-     
-    //     try {
-    //         const {data} = await axios.post('/api/users', {});
-    //         setNumberOfUsers(data)
-    //     } catch (e) {
-    //         alert('get data failed');
-    //         console.log(e)
-    //     }
-    // }
-    // getData()
+    async function getNumberOfUsers() {
+        try {
+            const {data} = await axios.get('/api/users', {});
+            setNumberOfUsers(data)
+        } catch (e) {
+            console.log(e)
+        }
+    }
+
+    async function getNumberOfOccupations() {
+        try {
+            const {data} = await axios.get('/api/occupations', {});
+            setNumberOfOccupations(data)
+        } catch (e) {
+            console.log(e)
+        }
+        try {
+            const {data} = await axios.get('/api/questionnaire', {});
+            setNumberOfQuestions(data)
+        } catch (e) {
+            console.log(e)
+        }
+    }
+
+    async function getNumberOfQuestions() {
+        try {
+            const {data} = await axios.get('/api/questionnaire', {});
+            setNumberOfQuestions(data)
+        } catch (e) {
+            console.log(e)
+        }
+    }
+
+    // get all the data for the section of Let's talk with numbers
+    if (numberOfUsers == 0){
+        getNumberOfUsers()
+    }
+    if (numberOfOccupations == 0){
+        getNumberOfOccupations()
+    }
+    if (numberOfQuestions == 0){
+        getNumberOfQuestions()
+    }
 
     return(
         <div>
@@ -91,7 +124,7 @@ export default function HomePage() {
                                     <div class="card h-100"> 
                                         <div class="card-body">
                                             <h2 class="card-title countNumber">
-                                                {counterOn &&<ReactCounUp isCounting end={numberOfOccupation} duration={3.2} />}
+                                                {counterOn &&<ReactCounUp isCounting end={numberOfOccupations} duration={3.2} />}
                                             </h2>
                                             <h5 class="card-title">Occupations</h5>
                                             <p class="card-text">

@@ -4,6 +4,8 @@ const mongoose = require('mongoose');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const User = require('./models/User.js');
+const Occupation = require('./models/Occupation.js');
+const Question = require('./models/Question.js');
 const cookieParser = require('cookie-parser');
 
 require('dotenv').config()
@@ -88,11 +90,39 @@ app.post('/api/logout', (req,res) => {
     res.cookie('token', '').json(true);
 });
   
-// get number of users
-// app.get('/api/users', async (req, res) => {
-//   mongoose.connect(process.env.MONGO_URL);
-//   const numberOfUsers = await User.collection.countDocuments({}, { hint: "_id_" });
-//   res.json(numberOfUsers);
-// }); 
+// get the number of users in the DB
+app.get('/api/users', async (req, res) => {
+  try {
+    const count = await User.countDocuments({});
+    res.json(count);
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
+// get the number of Occupations in the DB
+app.get('/api/occupations', async (req, res) => {
+  mongoose.connect(process.env.MONGO_URL);
+  try {
+    const count = await Occupation.countDocuments({});
+    res.json(count);
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
+// get the number of questions in the Questionnaire in the DB
+app.get('/api/questionnaire', async (req, res) => {
+  mongoose.connect(process.env.MONGO_URL);
+  try {
+    const count = await Question.countDocuments({});
+    res.json(count);
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
 
 app.listen(4000);
