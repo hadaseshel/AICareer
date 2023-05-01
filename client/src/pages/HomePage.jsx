@@ -7,7 +7,7 @@ import ScrollTrigger from 'react-scroll-trigger'
 
 export default function HomePage() {
     const [isLoading, setIsLoading] = useState(true);
-
+ 
     const [titleOfDescription, setTitleOfDescription] = useState(null);
     const [text1OfDescription, setText1OfDescription] = useState(null);
     const [text2OfDescription, setText2OfDescription] = useState(null);
