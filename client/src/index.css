@@ -31,4 +31,7 @@ button.primary{
 
 .countNumber{
     color:rgb(38, 156, 71);
+    display: flex;
+    align-items: center;
+    justify-content: center
 }
