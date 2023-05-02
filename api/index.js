@@ -125,4 +125,18 @@ app.get('/api/questionnaire', async (req, res) => {
   }
 });
 
+// get question from DB
+app.get('/api/questions', async (req, res) => {
+  mongoose.connect(process.env.MONGO_URL);
+  try {
+    const questions = await Question.find();
+    if (questions) {
+      res.json(questions);
+    }
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
 app.listen(4000);
