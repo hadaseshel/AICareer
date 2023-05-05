@@ -6,6 +6,8 @@ const jwt = require('jsonwebtoken');
 const User = require('./models/User.js');
 const Occupation = require('./models/Occupation.js');
 const Question = require('./models/Question.js');
+const Home = require('./models/Home.js');
+const HomeRouter = require('./routes/home.js');
 const cookieParser = require('cookie-parser');
 
 require('dotenv').config()
@@ -23,6 +25,9 @@ app.use(cors({
   }));
 
 mongoose.connect(process.env.MONGO_URL);
+
+// route the home 
+app.use('/api/home',HomeRouter)
 
 app.get('/test', (req, res) => {
     res.json('test ok');
@@ -138,5 +143,6 @@ app.get('/api/questions', async (req, res) => {
     res.status(500).json({ error: 'Internal server error' });
   }
 });
+
 
 app.listen(4000);
