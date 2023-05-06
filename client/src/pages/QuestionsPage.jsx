@@ -1,12 +1,17 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext} from "react";
 import ResultsPage from "./ResultsPage";
 import Question from './Question';
 import axios from "axios";
+import {UserContext} from "../UserContext";
+import {Navigate} from "react-router-dom";
+import { ProgressBar } from "react-bootstrap";
 
 export default function QuestionsPage() {
+    const {ready, user} = useContext(UserContext);
     const [questions, setQuestions] = useState([]);
     const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
     const [answers, setAnswers] = useState({});
+    const [numberOfQuestions, setNumberOfQuestions] = useState(0);
 
 
     useEffect(() => {
@@ -37,8 +42,25 @@ export default function QuestionsPage() {
         
     };
 
+    async function getNumberOfQuestions() {
+        try {
+            const {data} = await axios.get('/api/questionnaire', {});
+            setNumberOfQuestions(data)
+        } catch (e) {
+            console.log(e)
+        }
+    }
+
     if (questions.length === 0) {
         return 'Loading...';
+    }
+
+    if (!ready) {
+        return 'Loading...';
+    }
+
+    if (ready && !user) {
+        return <Navigate to={'/login'} />
     }
 
     const currentQuestionData = questions[currentQuestionIndex];
@@ -53,8 +75,20 @@ export default function QuestionsPage() {
         isLastQuestion: false,
     };
 
+    if (numberOfQuestions == 0){
+        getNumberOfQuestions()
+    }
+
     return (
-        <Question {...questionComponentProps} />
+        <div className="text-center mt-10">
+            <ProgressBar style={{width: 850, height: 20}}>
+                <ProgressBar striped variant="success" now={((currentQuestionIndex + 1) / questions.length) * 100 }/> 
+            </ProgressBar>
+
+            <div className="block-center mt-10">
+                <Question {...questionComponentProps} />
+            </div>
+        </div>
     );
 }
 
