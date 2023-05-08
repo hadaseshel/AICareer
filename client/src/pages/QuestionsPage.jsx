@@ -11,7 +11,8 @@ export default function QuestionsPage() {
     const [questions, setQuestions] = useState([]);
     const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
     const [answers, setAnswers] = useState({});
-    const [numberOfQuestions, setNumberOfQuestions] = useState(0);
+    const [redirect, setRedirect] = useState(false);
+
 
 
     useEffect(() => {
@@ -36,20 +37,30 @@ export default function QuestionsPage() {
         setCurrentQuestionIndex((prevIndex) => prevIndex === 0 ? prevIndex : prevIndex - 1);
     };
 
-    const handleSubmit = (answer) => {
+    async function handleSubmit(answer)  {
         setAnswers((prevAnswers) => ({ ...prevAnswers, [name]: answer }));
-        // go to results...
-        
-    };
-
-    async function getNumberOfQuestions() {
+        const answersAsNumArray = []
+        for (const key of Object.keys(answers)) {
+            if (answers[key] === "") {
+                alert("You didn't answer all questions");
+                return;
+            }
+            answersAsNumArray.push(parseInt(answers[key]))
+        }
         try {
-            const {data} = await axios.get('/api/questionnaire', {});
-            setNumberOfQuestions(data)
+            const userId = user._id;
+            console.log(userId)
+            console.log(typeof userId)
+            console.log(answersAsNumArray)
+            console.log(typeof answersAsNumArray)
+            const {data} = await axios.post('/api/response', {userId,answersAsNumArray});
+            setRedirect(true);
         } catch (e) {
+            alert('Response failed');
             console.log(e)
         }
-    }
+    };
+
 
     if (questions.length === 0) {
         return 'Loading...';
@@ -59,8 +70,12 @@ export default function QuestionsPage() {
         return 'Loading...';
     }
 
-    if (ready && !user) {
+    if (ready && !user && !redirect) {
         return <Navigate to={'/login'} />
+    }
+
+    if (redirect) {
+        return <Navigate to={'/results'} />
     }
 
     const currentQuestionData = questions[currentQuestionIndex];
@@ -72,12 +87,8 @@ export default function QuestionsPage() {
         onSubmit: handleSubmit,
         description,
         options: ["1", "2", "3", "4", "5"],
-        isLastQuestion: false,
+        completePercentage: ((currentQuestionIndex + 1) / questions.length) * 100,
     };
-
-    if (numberOfQuestions == 0){
-        getNumberOfQuestions()
-    }
 
     return (
         <div className="text-center mt-10">

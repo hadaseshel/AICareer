@@ -6,6 +6,7 @@ import HomePage from './pages/HomePage';
 import QuestionsPage from './pages/QuestionsPage';
 import ProfilePage from "./pages/ProfilePage";
 import AdminPage from './pages/AdminPage';
+import ResultsPage from './pages/ResultsPage';
 import {Route, Routes} from "react-router-dom";
 import axios from "axios";
 import {UserContextProvider} from "./UserContext";
@@ -45,6 +46,7 @@ function App() {
             <Route path="/account" element={<ProfilePage />} />
             <Route path="/admin" element={<AdminPage />} />
             <Route path="/questionnaire" element={<QuestionsPage />} />
+            <Route path="/results" element={<ResultsPage />} />
           </Route>   
         </Routes>
       </UserContextProvider>
