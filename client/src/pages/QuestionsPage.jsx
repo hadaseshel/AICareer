@@ -38,22 +38,19 @@ export default function QuestionsPage() {
     };
 
     async function handleSubmit(answer)  {
-        setAnswers((prevAnswers) => ({ ...prevAnswers, [name]: answer }));
-        const answersAsNumArray = []
+        const user_answers = [];
         for (const key of Object.keys(answers)) {
             if (answers[key] === "") {
                 alert("You didn't answer all questions");
                 return;
             }
-            answersAsNumArray.push(parseInt(answers[key]))
+            user_answers.push(parseInt(answers[key]));
         }
+        // Insert the last answer
+        user_answers.push(parseInt(answer));
+        console.log(user_answers.length)
         try {
-            const userId = user._id;
-            console.log(userId)
-            console.log(typeof userId)
-            console.log(answersAsNumArray)
-            console.log(typeof answersAsNumArray)
-            const {data} = await axios.post('/api/response', {userId,answersAsNumArray});
+            await axios.post('/api/response', {user_id: user._id, user_answers: user_answers});
             setRedirect(true);
         } catch (e) {
             alert('Response failed');

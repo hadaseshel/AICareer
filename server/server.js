@@ -148,18 +148,16 @@ app.get('/api/questions', async (req, res) => {
 // response post request
 app.post('/api/response', async (req,res) => {
   mongoose.connect(process.env.MONGO_URL);
-  const {user_id,answers} = req.body;
+  const {user_id,user_answers} = req.body;
 
   try {
     const responseDoc = await Response.create({
       user_id,
-      answers
+      user_answers
     });
     res.json(responseDoc);
   } catch (e) {
     res.status(422).json(e);
-    console.log("IN SERVER")
-    console.log(e)
   }
 
 });
