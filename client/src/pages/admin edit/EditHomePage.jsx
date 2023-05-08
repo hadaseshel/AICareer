@@ -7,7 +7,7 @@ import axios from "axios";
 import ScrollTrigger from 'react-scroll-trigger'
 import { useNavigate } from "react-router-dom";
 
-export default function HomePage() {
+export default function EditHomePage() {
     const navigate = useNavigate();
     const [isLoading, setIsLoading] = useState(0);
 
@@ -100,6 +100,10 @@ export default function HomePage() {
         
     },[]);
 
+    const changeEditMode = () => {
+        console.log("hii")
+    }
+
     // if we didn't load all the data
     console.log(isLoading)
     if (isLoading != 1) {
@@ -116,9 +120,9 @@ export default function HomePage() {
 
     return(
         <div>
-            <div className="mx-auto max-w-2xl py-16 sm:py-32 lg:py-38">
+            <div className="mx-auto max-w-2xl py-5 sm:py-21 lg:py-27 text-center">
                 <div className="text-center">
-                    <h1 className="text-4xl font-bold tracking-tight text-gray-900 sm:text-6xl">
+                    <h1 className="text-4xl font-bold tracking-tight text-gray-900 sm:text-6xl" onClick={changeEditMode}>
                     {titleOfDescription}
                     </h1>
                     <p className="mt-6 text-xl leading-8 text-gray-800">
@@ -128,14 +132,13 @@ export default function HomePage() {
                         {text2OfDescription}
                     </p>
                     <div className="mt-10 gap-x-6">
-                        <button className="btn btn-success" onClick={()=>{navigate("/questionnaire");}}>{text3OfDescription}</button>
+                        <button className="btn btn-success">{text3OfDescription}</button>
                     </div>
                 </div>
             </div>
 
-       
 
-            <div className="mx-auto max-w-2xl py-16 sm:py-32 lg:py-38">
+            <div className="mx-auto max-w-2xl py-5 sm:py-21 lg:py-27 text-center">
                 <div className="text-center">
                     <h1 className="text-4xl font-bold tracking-tight text-gray-900 sm:text-6xl">
                     {titleOfNumbers}
@@ -189,7 +192,7 @@ export default function HomePage() {
             </div>
 
 
-            <div className="mx-auto max-w-2xl py-16 sm:py-32 lg:py-38">
+            <div className="mx-auto max-w-2xl py-5 sm:py-21 lg:py-27 text-center">
                 <div className="text-center">
                     <h1 className="text-4xl font-bold tracking-tight text-gray-900 sm:text-6xl">
                     {titleOfMarket}
