@@ -6,28 +6,6 @@ import axios from "axios";
 import ScrollTrigger from 'react-scroll-trigger'
 
 export default function HomePage() {
-    const [isLoading, setIsLoading] = useState(true);
-
-    const [titleOfDescription, setTitleOfDescription] = useState(null);
-    const [text1OfDescription, setText1OfDescription] = useState(null);
-    const [text2OfDescription, setText2OfDescription] = useState(null);
-    const [text3OfDescription, setText3OfDescription] = useState(null);
-
-    const [titleOfNumbers, setTitleOfNumbers] = useState("");
-    const [title1OfNumbers, setTitle1OfNumbers] = useState("");
-    const [text1OfNumbers, setText1OfNumbers] = useState("");
-    const [title2OfNumbers, setTitle2OfNumbers] = useState("");
-    const [text2OfNumbers, setText2OfNumbers] = useState("");
-    const [title3OfNumbers, setTitle3OfNumbers] = useState("");
-    const [text3OfNumbers, setText3OfNumbers] = useState("");
-
-    const [titleOfMarket, setTitleOfMarket] = useState("");
-    const [title1OfMarket, setTitle1OfMarket] = useState("");
-    const [text1OfMarket, setText1OfMarket] = useState("");
-    const [title2OfMarket, setTitle2OfMarket] = useState("");
-    const [text2OfMarket, setText2OfMarket] = useState("");
-    const [title3OfMarket, setTitle3OfMarket] = useState("");
-    const [text3OfMarket, setText3OfMarket] = useState("");
 
     const [isLoading, setIsLoading] = useState(true);
 
