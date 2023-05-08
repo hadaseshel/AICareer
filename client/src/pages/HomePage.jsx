@@ -7,6 +7,7 @@ import axios from "axios";
 import ScrollTrigger from 'react-scroll-trigger'
 
 export default function HomePage() {
+
     const [isLoading, setIsLoading] = useState(true);
 
     const [titleOfDescription, setTitleOfDescription] = useState(null);
