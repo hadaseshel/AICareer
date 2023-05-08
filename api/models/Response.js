@@ -6,6 +6,6 @@ const ResponseSchema = new Schema({
   answers: [Number],
 });
 
-const ResponseModel = mongoose.model('Response', UserSchema);
+const ResponseModel = mongoose.model('Response', ResponseSchema);
 
 module.exports = ResponseModel;

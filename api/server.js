@@ -7,6 +7,7 @@ const User = require('./models/User.js');
 const Occupation = require('./models/Occupation.js');
 const Question = require('./models/Question.js');
 const Home = require('./models/Home.js');
+const Response = require('./models/Response.js');
 const HomeRouter = require('./routes/home.js');
 const cookieParser = require('cookie-parser');
 
@@ -157,6 +158,7 @@ app.post('/api/response', async (req,res) => {
     res.json(responseDoc);
   } catch (e) {
     res.status(422).json(e);
+    console.log("IN SERVER")
     console.log(e)
   }
 
