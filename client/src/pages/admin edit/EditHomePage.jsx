@@ -7,7 +7,7 @@ import axios from "axios";
 import ScrollTrigger from 'react-scroll-trigger'
 import { useNavigate } from "react-router-dom";
 
-export default function HomePage() {
+export default function EditHomePage() {
     const navigate = useNavigate();
     const [isLoading, setIsLoading] = useState(0);
 
@@ -15,6 +15,7 @@ export default function HomePage() {
     const [text1OfDescription, setText1OfDescription] = useState(null);
     const [text2OfDescription, setText2OfDescription] = useState(null);
     const [text3OfDescription, setText3OfDescription] = useState(null);
+    const [editModeDescription, setEditModeDescription] = useState(false);
 
     const [titleOfNumbers, setTitleOfNumbers] = useState("");
     const [title1OfNumbers, setTitle1OfNumbers] = useState("");
@@ -23,6 +24,7 @@ export default function HomePage() {
     const [text2OfNumbers, setText2OfNumbers] = useState("");
     const [title3OfNumbers, setTitle3OfNumbers] = useState("");
     const [text3OfNumbers, setText3OfNumbers] = useState("");
+    const [editModeNumbers, setEditModeNumbers] = useState(false);
 
     const [titleOfMarket, setTitleOfMarket] = useState("");
     const [title1OfMarket, setTitle1OfMarket] = useState("");
@@ -31,6 +33,7 @@ export default function HomePage() {
     const [text2OfMarket, setText2OfMarket] = useState("");
     const [title3OfMarket, setTitle3OfMarket] = useState("");
     const [text3OfMarket, setText3OfMarket] = useState("");
+    const [editModeMarket, setEditModeMarket] = useState(false);
 
     const [numberOfUsers, setNumberOfUsers] = useState(0);
     const [numberOfOccupations, setNumberOfOccupations] = useState(0);
@@ -100,8 +103,10 @@ export default function HomePage() {
         
     },[]);
 
-    // if we didn't load all the data
-    console.log(isLoading)
+    const changeToEditMode = (state,setFunc) => {
+        setFunc(!state)
+    }
+
     if (isLoading != 1) {
         return(
             <div className="mx-auto max-w-2xl py-16 sm:py-32 lg:py-38">
@@ -116,7 +121,7 @@ export default function HomePage() {
 
     return(
         <div>
-            <div className="mx-auto max-w-2xl py-16 sm:py-32 lg:py-38">
+            <div className="mx-auto max-w-2xl py-5 sm:py-21 lg:py-27 text-center">
                 <div className="text-center">
                     <h1 className="text-4xl font-bold tracking-tight text-gray-900 sm:text-6xl">
                     {titleOfDescription}
@@ -128,14 +133,13 @@ export default function HomePage() {
                         {text2OfDescription}
                     </p>
                     <div className="mt-10 gap-x-6">
-                        <button className="btn btn-success" onClick={()=>{navigate("/questionnaire");}}>{text3OfDescription}</button>
+                        <button className="btn btn-success">{text3OfDescription}</button>
                     </div>
                 </div>
             </div>
 
-       
 
-            <div className="mx-auto max-w-2xl py-16 sm:py-32 lg:py-38">
+            <div className="mx-auto max-w-2xl py-5 sm:py-21 lg:py-27 text-center">
                 <div className="text-center">
                     <h1 className="text-4xl font-bold tracking-tight text-gray-900 sm:text-6xl">
                     {titleOfNumbers}
@@ -189,7 +193,7 @@ export default function HomePage() {
             </div>
 
 
-            <div className="mx-auto max-w-2xl py-16 sm:py-32 lg:py-38">
+            <div className="mx-auto max-w-2xl py-5 sm:py-21 lg:py-27 text-center">
                 <div className="text-center">
                     <h1 className="text-4xl font-bold tracking-tight text-gray-900 sm:text-6xl">
                     {titleOfMarket}
