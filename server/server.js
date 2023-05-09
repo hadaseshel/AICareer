@@ -135,7 +135,7 @@ app.get('/api/questionnaire', async (req, res) => {
 app.get('/api/questions', async (req, res) => {
   mongoose.connect(process.env.MONGO_URL);
   try {
-    const questions = await Question.find();
+    const questions = await Question.find().limit(4);
     if (questions) {
       res.json(questions);
     }

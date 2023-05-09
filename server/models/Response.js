@@ -4,7 +4,7 @@ const {Schema} = mongoose;
 const ResponseSchema = new Schema({
   user_id: String,
   user_answers: [{
-    type: String
+    type: Number
   }],
 });
 

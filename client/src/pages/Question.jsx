@@ -1,9 +1,10 @@
 import React, { useState } from "react";
 
-export default function Question({ onNext, onPrevious, onSubmit, description, options, completePercentage }) {
+export default function Question({ onChange, onNext, onPrevious, onSubmit, question, options, completePercentage, answers }) {
   const [answer, setAnswer] = useState("");
 
   const handleOptionChange = (event) => {
+    onChange(event.target.value);
     setAnswer(event.target.value);
   };
 
@@ -18,9 +19,11 @@ export default function Question({ onNext, onPrevious, onSubmit, description, op
   };
 
   const handleSubmitClick = () => {
-    onSubmit(answer);
+    onSubmit();
     setAnswer("");
   };
+
+  const { name, description } = question;
 
   return (
     <div>
@@ -52,7 +55,7 @@ export default function Question({ onNext, onPrevious, onSubmit, description, op
                           className="form-check-input"
                           type="radio"
                           value={option}
-                          checked={answer === option}
+                          checked={answer === option || (name in answers && answers[name] === option) }
                           onChange={handleOptionChange}
                       />
                       {option}

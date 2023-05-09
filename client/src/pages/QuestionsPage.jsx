@@ -28,8 +28,11 @@ export default function QuestionsPage() {
         fetchQuestions();
     }, []);
 
-    const handleNext = (answer) => {
+    const handleChange = (answer) => {
         setAnswers((prevAnswers) => ({ ...prevAnswers, [name]: answer }));
+    };
+
+    const handleNext = (answer) => {
         setCurrentQuestionIndex((prevIndex) => prevIndex === questions.length - 1 ? prevIndex : prevIndex + 1);
     };
 
@@ -37,18 +40,17 @@ export default function QuestionsPage() {
         setCurrentQuestionIndex((prevIndex) => prevIndex === 0 ? prevIndex : prevIndex - 1);
     };
 
-    async function handleSubmit(answer)  {
+    async function handleSubmit()  {
         const user_answers = [];
+        if (Object.keys(answers).length !== questions.length) {
+            alert("You didn't answer all questions");
+            return;
+        }
         for (const key of Object.keys(answers)) {
-            if (answers[key] === "") {
-                alert("You didn't answer all questions");
-                return;
-            }
             user_answers.push(parseInt(answers[key]));
         }
         // Insert the last answer
-        user_answers.push(parseInt(answer));
-        console.log(user_answers.length)
+        //user_answers.push(parseInt(answer));
         try {
             await axios.post('/api/response', {user_id: user._id, user_answers: user_answers});
             setRedirect(true);
@@ -79,12 +81,14 @@ export default function QuestionsPage() {
     const { name, description } = currentQuestionData;
 
     const questionComponentProps = {
+        onChange: handleChange,
         onNext: handleNext,
         onPrevious: handlePrevious,
         onSubmit: handleSubmit,
-        description,
+        question: currentQuestionData,
         options: ["1", "2", "3", "4", "5"],
         completePercentage: ((currentQuestionIndex + 1) / questions.length) * 100,
+        answers,
     };
 
     return (
