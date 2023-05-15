@@ -20,4 +20,16 @@ router.get('/', async (req, res) => {
     }
   });
 
+  router.put('/', async (req, res) => {
+    mongoose.connect(process.env.MONGO_URL);
+    // const {section} =  req.query;
+    // try {
+    //     const sectionData = await Home.findOne({section});
+    //     res.json(sectionData);
+    // } catch (err) {
+    //   console.log(err);
+    //   res.status(500).json({ error: 'Internal server error' });
+    // }
+  });
+
   module.exports = router;
