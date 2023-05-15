@@ -97,6 +97,7 @@ export default function HomePage() {
 
         getNumberOf(setNumberOfUsers,'/api/users');
         getNumberOf(setNumberOfOccupations,'/api/occupations');
+        getNumberOf(setNumberOfQuestions,'/api/questions/count');
         
     },[]);
 
