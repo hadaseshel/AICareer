@@ -15,7 +15,6 @@ export default function EditHomePage() {
     const [text1OfDescription, setText1OfDescription] = useState(null);
     const [text2OfDescription, setText2OfDescription] = useState(null);
     const [text3OfDescription, setText3OfDescription] = useState(null);
-    const [editModeDescription, setEditModeDescription] = useState(false);
 
     const [titleOfNumbers, setTitleOfNumbers] = useState("");
     const [title1OfNumbers, setTitle1OfNumbers] = useState("");
@@ -24,7 +23,6 @@ export default function EditHomePage() {
     const [text2OfNumbers, setText2OfNumbers] = useState("");
     const [title3OfNumbers, setTitle3OfNumbers] = useState("");
     const [text3OfNumbers, setText3OfNumbers] = useState("");
-    const [editModeNumbers, setEditModeNumbers] = useState(false);
 
     const [titleOfMarket, setTitleOfMarket] = useState("");
     const [title1OfMarket, setTitle1OfMarket] = useState("");
@@ -33,12 +31,10 @@ export default function EditHomePage() {
     const [text2OfMarket, setText2OfMarket] = useState("");
     const [title3OfMarket, setTitle3OfMarket] = useState("");
     const [text3OfMarket, setText3OfMarket] = useState("");
-    const [editModeMarket, setEditModeMarket] = useState(false);
 
     const [numberOfUsers, setNumberOfUsers] = useState(0);
     const [numberOfOccupations, setNumberOfOccupations] = useState(0);
     const [numberOfQuestions, setNumberOfQuestions] = useState(0);
-    const [counterOn, setCounterOn]= useState(false);
  
     // put the data of section Description in the page
     function putSectionOfDescription(data) {
@@ -104,10 +100,30 @@ export default function EditHomePage() {
         
     },[]);
 
+    // restor the Values of section from DB
     async function restorValues(setFunc,path, depSection) {
         try {
             const {data} = await axios.get(path, { params: { section: depSection } });
             setFunc(data);
+        } catch (e) {
+            console.log(e);
+        } 
+    }
+
+     // UPDATE the Values of section to the DB
+    async function updadeValues(path, depSection, title, title1, text1, title2, text2, title3, text3) {
+        console.log({depSection, title, title1, text1, title2, text2, title3, text3})
+        try {
+            await axios.put(path, { 
+                section: depSection,  
+                title: title,
+                title1: title1,
+                text1: text1,
+                title2: title2,
+                text2: text2,
+                title3: title3,
+                text3: text3 });
+
         } catch (e) {
             console.log(e);
         } 
@@ -136,7 +152,7 @@ export default function EditHomePage() {
                 </div>
                 <div className="mt-10 gap-x-6">
                     <div class="btn-group" role="group" aria-label="Basic mixed styles example">
-                        <button type="button" class="btn btn-outline-dark">Save changes</button>
+                        <button type="button" class="btn btn-outline-dark" onClick={()=>updadeValues('/api/home', "description", titleOfDescription, "", text1OfDescription, "", text2OfDescription, "", text3OfDescription)} >Save changes</button>
                         <button type="button" class="btn btn-outline-dark" onClick={()=>restorValues(putSectionOfDescription,'/api/home', "description")}>Disregard changes</button>
                     </div>
                 </div>
@@ -186,7 +202,7 @@ export default function EditHomePage() {
                 </div>
                 <div className="mt-10 gap-x-6">
                     <div class="btn-group" role="group" aria-label="Basic mixed styles example">
-                        <button type="button" class="btn btn-outline-dark">Save changes</button>
+                        <button type="button" class="btn btn-outline-dark" onClick={()=>updadeValues('/api/home', "numbers of app", titleOfNumbers, title1OfNumbers, text1OfNumbers, title2OfNumbers, text2OfNumbers, title3OfNumbers, text3OfNumbers)}>Save changes</button>
                         <button type="button" class="btn btn-outline-dark" onClick={()=>restorValues(putSectionOfNumbers,'/api/home', "numbers of app")}>Disregard changes</button>
                     </div>
                 </div>
@@ -243,7 +259,7 @@ export default function EditHomePage() {
                 </div>
                 <div className="mt-10 gap-x-6">
                     <div class="btn-group" role="group" aria-label="Basic mixed styles example">
-                        <button type="button" class="btn btn-outline-dark">Save changes</button>
+                        <button type="button" class="btn btn-outline-dark" onClick={()=>updadeValues('/api/home', "market status", titleOfMarket, title1OfMarket, text1OfMarket, title2OfMarket, text2OfMarket, title3OfMarket, text3OfMarket)}>Save changes</button>
                         <button type="button" class="btn btn-outline-dark" onClick={()=>restorValues(putSectionOfMarket,'/api/home', "market status")}>Disregard changes</button>
                     </div>
                 </div>

@@ -20,16 +20,18 @@ router.get('/', async (req, res) => {
     }
   });
 
+  // Updating values of the section
   router.put('/', async (req, res) => {
     mongoose.connect(process.env.MONGO_URL);
-    // const {section} =  req.query;
-    // try {
-    //     const sectionData = await Home.findOne({section});
-    //     res.json(sectionData);
-    // } catch (err) {
-    //   console.log(err);
-    //   res.status(500).json({ error: 'Internal server error' });
-    // }
+    const {section,title,title1,text1,title2,text2,title3,text3} =  req.body;
+    try {
+      const result = await Home.updateOne( { section },
+        { title, title1, text1, title2, text2, title3, text3 });
+        res.json(result);
+    } catch (err) {
+      console.log(err);
+      res.status(500).json({ error: 'Internal server error' });
+    }
   });
 
   module.exports = router;
