@@ -9,6 +9,7 @@ const Question = require('./models/Question.js');
 const Home = require('./models/Home.js');
 const Response = require('./models/Response.js');
 const HomeRouter = require('./routes/home.js');
+const ResponseRouter = require('./routes/response.js');
 const cookieParser = require('cookie-parser');
 
 require('dotenv').config()
@@ -29,6 +30,10 @@ mongoose.connect(process.env.MONGO_URL);
 
 // route the home 
 app.use('/api/home',HomeRouter)
+
+// route the response 
+app.use('/api/response',ResponseRouter)
+
 
 app.get('/test', (req, res) => {
     res.json('test ok');
@@ -131,11 +136,11 @@ app.get('/api/questionnaire', async (req, res) => {
   }
 });
 
-// get question from DB
+// get questions from DB
 app.get('/api/questions', async (req, res) => {
   mongoose.connect(process.env.MONGO_URL);
   try {
-    const questions = await Question.find().limit(4);
+    const questions = await Question.find().sort( { "$natural": 1 } ).limit(4);
     if (questions) {
       res.json(questions);
     }
@@ -145,22 +150,34 @@ app.get('/api/questions', async (req, res) => {
   }
 });
 
+// move to respone router
 // response post request
-app.post('/api/response', async (req,res) => {
-  mongoose.connect(process.env.MONGO_URL);
-  const {user_id,user_answers} = req.body;
+// app.post('/api/response/write', async (req,res) => {
+//   mongoose.connect(process.env.MONGO_URL);
+//   const {user_id,user_answers} = req.body;
 
-  try {
-    const responseDoc = await Response.create({
-      user_id,
-      user_answers
-    });
-    res.json(responseDoc);
-  } catch (e) {
-    res.status(422).json(e);
-  }
+//   try {
+//     const responseDoc = await Response.create({
+//       user_id,
+//       user_answers
+//     });
+//     res.json(responseDoc);
+//   } catch (e) {
+//     res.status(422).json(e);
+//   }
+// });
 
-});
+
+// // get response by user id
+// app.get('/api/response/get', async (req,res) => {
+//   console.log("in get response");
+//   mongoose.connect(process.env.MONGO_URL);
+//   const user_id = req.query.user_id
+//   const responseDoc = await Response.findOne({user_id});
+//   if (responseDoc) {
+//       res.json(responseDoc);
+//   }
+// });
 
 
 app.listen(4000);
