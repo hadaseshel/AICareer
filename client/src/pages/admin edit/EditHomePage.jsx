@@ -100,6 +100,7 @@ export default function EditHomePage() {
 
         getNumberOf(setNumberOfUsers,'/api/users');
         getNumberOf(setNumberOfOccupations,'/api/occupations');
+        getNumberOf(setNumberOfQuestions,'/api/questions/count');
         
     },[]);
 

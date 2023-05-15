@@ -125,7 +125,7 @@ app.get('/api/occupations', async (req, res) => {
 });
 
 // get the number of questions in the Questionnaire in the DB
-app.get('/api/questionnaire', async (req, res) => {
+app.get('/api/questions/count', async (req, res) => {
   mongoose.connect(process.env.MONGO_URL);
   try {
     const count = await Question.countDocuments({});
