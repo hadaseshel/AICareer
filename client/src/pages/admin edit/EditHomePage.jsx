@@ -104,8 +104,13 @@ export default function EditHomePage() {
         
     },[]);
 
-    const changeToEditMode = (state,setFunc) => {
-        setFunc(!state)
+    async function restorValues(setFunc,path, depSection) {
+        try {
+            const {data} = await axios.get(path, { params: { section: depSection } });
+            setFunc(data);
+        } catch (e) {
+            console.log(e);
+        } 
     }
 
     if (isLoading != 1) {
@@ -124,17 +129,15 @@ export default function EditHomePage() {
         <div>
             <div className="mx-auto max-w-2xl py-5 sm:py-21 lg:py-27 text-center">
                 <div className="text-center">
-                    <h1 className="text-4xl font-bold tracking-tight text-gray-900 sm:text-6xl">
-                    {titleOfDescription}
-                    </h1>
-                    <p className="mt-6 text-xl leading-8 text-gray-800">
-                       {text1OfDescription}
-                    </p>
-                    <p className="mt-6 text-xl leading-8 text-gray-800">
-                        {text2OfDescription}
-                    </p>
-                    <div className="mt-10 gap-x-6">
-                        <button className="btn btn-success">{text3OfDescription}</button>
+                    <input type="text" className="text-4xl font-bold tracking-tight text-gray-900 sm:text-6xl centered-input" value={titleOfDescription} onChange={(e) => setTitleOfDescription(e.target.value)}></input>
+                    <input type="text" className="mt-6 text-xl leading-8 text-gray-800 centered-input" value={text1OfDescription} onChange={(e) => setText1OfDescription(e.target.value)}></input>
+                    <input type="text" className="mt-6 text-xl leading-8 text-gray-800 centered-input" value={text2OfDescription} onChange={(e) => setText2OfDescription(e.target.value)}></input>
+                    <input type="text" className="btn btn-success" value={text3OfDescription} onChange={(e) => setText3OfDescription(e.target.value)} ></input>
+                </div>
+                <div className="mt-10 gap-x-6">
+                    <div class="btn-group" role="group" aria-label="Basic mixed styles example">
+                        <button type="button" class="btn btn-outline-dark">Save changes</button>
+                        <button type="button" class="btn btn-outline-dark" onClick={()=>restorValues(putSectionOfDescription,'/api/home', "description")}>Disregard changes</button>
                     </div>
                 </div>
             </div>
@@ -142,22 +145,17 @@ export default function EditHomePage() {
 
             <div className="mx-auto max-w-2xl py-5 sm:py-21 lg:py-27 text-center">
                 <div className="text-center">
-                    <h1 className="text-4xl font-bold tracking-tight text-gray-900 sm:text-6xl">
-                    {titleOfNumbers}
-                    </h1>
-                    <ScrollTrigger onEnter={()=>setCounterOn(true)} onExit={()=>setCounterOn(false)}>
+                    <input type="text" className="text-4xl font-bold tracking-tight text-gray-900 sm:text-6xl centered-input" value={titleOfNumbers} onChange={(e) => setTitleOfNumbers(e.target.value)}></input>
                         <div class="container text-center mt-8">
                             <div class="row row-cols-3">
                                 <div class="col">
                                     <div class="card h-100"> 
                                         <div class="card-body">
                                             <h2 class="card-title countNumber">
-                                                {counterOn &&<ReactCounUp isCounting end={numberOfQuestions} duration={3.2} />}
+                                                {numberOfQuestions}
                                             </h2>
-                                            <h5 class="card-title">{title1OfNumbers}</h5>
-                                                <p class="card-text">
-                                                    {text1OfNumbers}
-                                                </p>
+                                            <input type="text" className="card-title centered-input text-xl font-bold" value={title1OfNumbers} onChange={(e) => setTitle1OfNumbers(e.target.value)}></input>
+                                            <input type="text" className="card-text centered-input" value={text1OfNumbers} onChange={(e) => setText1OfNumbers(e.target.value)}></input>
                                         </div>
                                     </div>
                                 </div>
@@ -165,12 +163,10 @@ export default function EditHomePage() {
                                     <div class="card h-100"> 
                                         <div class="card-body">
                                             <h2 class="card-title countNumber">
-                                                {counterOn && <ReactCounUp isCounting end={numberOfUsers} duration={3.2} />}
+                                                {numberOfUsers}
                                             </h2>
-                                            <h5 class="card-title">{title2OfNumbers}</h5>
-                                            <p class="card-text">
-                                                {text2OfNumbers}
-                                            </p>
+                                            <input type="text" className="card-title centered-input text-xl font-bold" value={title2OfNumbers} onChange={(e) => setTitle2OfNumbers(e.target.value)}></input>
+                                            <input type="text" className="card-text centered-input" value={text2OfNumbers} onChange={(e) => setText2OfNumbers(e.target.value)}></input>
                                         </div>
                                     </div>
                                 </div>
@@ -178,28 +174,28 @@ export default function EditHomePage() {
                                     <div class="card h-100"> 
                                         <div class="card-body">
                                             <h2 class="card-title countNumber">
-                                                {counterOn &&<ReactCounUp isCounting end={numberOfOccupations} duration={3.2} />}
+                                                {numberOfOccupations}
                                             </h2>
-                                            <h5 class="card-title">{title3OfNumbers}</h5>
-                                            <p class="card-text">
-                                               {text3OfNumbers}
-                                            </p>
+                                            <input type="text" className="card-title centered-input text-xl font-bold" value={title3OfNumbers} onChange={(e) => setTitle3OfNumbers(e.target.value)}></input>
+                                            <input type="text" className="card-text centered-input" value={text3OfNumbers} onChange={(e) => setText3OfNumbers(e.target.value)}></input>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                    </ScrollTrigger>
+                </div>
+                <div className="mt-10 gap-x-6">
+                    <div class="btn-group" role="group" aria-label="Basic mixed styles example">
+                        <button type="button" class="btn btn-outline-dark">Save changes</button>
+                        <button type="button" class="btn btn-outline-dark" onClick={()=>restorValues(putSectionOfNumbers,'/api/home', "numbers of app")}>Disregard changes</button>
+                    </div>
                 </div>
             </div>
 
 
             <div className="mx-auto max-w-2xl py-5 sm:py-21 lg:py-27 text-center">
                 <div className="text-center">
-                    <h1 className="text-4xl font-bold tracking-tight text-gray-900 sm:text-6xl">
-                    {titleOfMarket}
-                    </h1>
-                    
+                    <input type="text" className="text-4xl font-bold tracking-tight text-gray-900 sm:text-6xl centered-input" value={titleOfMarket} onChange={(e) => setTitleOfMarket(e.target.value)}></input>
                         <div class="container text-center mt-8">
                             <div class="row mb-4">
                                 <div class="col">
@@ -210,10 +206,8 @@ export default function EditHomePage() {
                                                     <path d="M15.985 8.5H8.207l-5.5 5.5a8 8 0 0 0 13.277-5.5zM2 13.292A8 8 0 0 1 7.5.015v7.778l-5.5 5.5zM8.5.015V7.5h7.485A8.001 8.001 0 0 0 8.5.015z"/>
                                                 </svg>
                                             </h2>
-                                            <h5 class="card-title">{title1OfMarket}</h5>
-                                                <p class="card-text">
-                                                    {text1OfMarket}
-                                                </p>
+                                            <input type="text" className="card-title centered-input text-xl font-bold" value={title1OfMarket} onChange={(e) => setTitle1OfMarket(e.target.value)}></input>
+                                            <input type="text" className="card-text centered-input" value={text1OfMarket} onChange={(e) => setText1OfMarket(e.target.value)}></input>
                                         </div>
                                     </div>
                                 </div>
@@ -224,13 +218,10 @@ export default function EditHomePage() {
                                             <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" fill="currentColor" class="bi bi-wallet-fill" viewBox="0 0 16 16">
                                                 <path d="M1.5 2A1.5 1.5 0 0 0 0 3.5v2h6a.5.5 0 0 1 .5.5c0 .253.08.644.306.958.207.288.557.542 1.194.542.637 0 .987-.254 1.194-.542.226-.314.306-.705.306-.958a.5.5 0 0 1 .5-.5h6v-2A1.5 1.5 0 0 0 14.5 2h-13z"/>
                                                 <path d="M16 6.5h-5.551a2.678 2.678 0 0 1-.443 1.042C9.613 8.088 8.963 8.5 8 8.5c-.963 0-1.613-.412-2.006-.958A2.679 2.679 0 0 1 5.551 6.5H0v6A1.5 1.5 0 0 0 1.5 14h13a1.5 1.5 0 0 0 1.5-1.5v-6z"/>
-                                            </svg>
-                                                
+                                            </svg>  
                                             </h2>
-                                            <h5 class="card-title">{title2OfMarket}</h5>
-                                            <p class="card-text">
-                                                {text2OfMarket}
-                                            </p>
+                                            <input type="text" className="card-title centered-input text-xl font-bold" value={title2OfMarket} onChange={(e) => setTitle2OfMarket(e.target.value)}></input>
+                                            <input type="text" className="card-text centered-input" value={text2OfMarket} onChange={(e) => setText2OfMarket(e.target.value)}></input>
                                         </div>
                                     </div>
                                 </div>
@@ -242,15 +233,19 @@ export default function EditHomePage() {
                                                     <path d="M1.5 15a.5.5 0 0 0 0 1h13a.5.5 0 0 0 0-1H13V2.5A1.5 1.5 0 0 0 11.5 1H11V.5a.5.5 0 0 0-.57-.495l-7 1A.5.5 0 0 0 3 1.5V15H1.5zM11 2h.5a.5.5 0 0 1 .5.5V15h-1V2zm-2.5 8c-.276 0-.5-.448-.5-1s.224-1 .5-1 .5.448.5 1-.224 1-.5 1z"/>
                                                 </svg>    
                                             </h2>
-                                            <h5 class="card-title">{title3OfMarket}</h5>
-                                            <p class="card-text">
-                                                {text3OfMarket}
-                                            </p>
+                                            <input type="text" className="card-title centered-input text-xl font-bold" value={title3OfMarket} onChange={(e) => setTitle3OfMarket(e.target.value)}></input>
+                                            <input type="text" className="card-text centered-input" value={text3OfMarket} onChange={(e) => setText3OfMarket(e.target.value)}></input>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
+                </div>
+                <div className="mt-10 gap-x-6">
+                    <div class="btn-group" role="group" aria-label="Basic mixed styles example">
+                        <button type="button" class="btn btn-outline-dark">Save changes</button>
+                        <button type="button" class="btn btn-outline-dark" onClick={()=>restorValues(putSectionOfMarket,'/api/home', "market status")}>Disregard changes</button>
+                    </div>
                 </div>
             </div>
         </div>

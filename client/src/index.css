@@ -35,3 +35,10 @@ button.primary{
     align-items: center;
     justify-content: center
 }
+
+.centered-input {
+    text-align: center;
+    background: none;
+    height: auto
+}
+
