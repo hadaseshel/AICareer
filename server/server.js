@@ -42,14 +42,15 @@ app.get('/test', (req, res) => {
 // register post request
 app.post('/api/register', async (req,res) => {
     mongoose.connect(process.env.MONGO_URL);
-    const {name,email,password,type} = req.body;
+    const {name,email,password,type,answered} = req.body;
   
     try {
       const userDoc = await User.create({
         name,
         email,
         password:bcrypt.hashSync(password, bcryptSalt),
-        type
+        type,
+        answered
       });
       res.json(userDoc);
     } catch (e) {
@@ -88,8 +89,8 @@ app.get('/api/profile', (req,res) => {
     if (token) {
       jwt.verify(token, jwtSecret, {}, async (err, userData) => {
         if (err) throw err;
-        const {name,email,type,_id,} = await User.findById(userData.id);
-        res.json({name,email,type,_id});
+        const {name,email,type,answered,_id,} = await User.findById(userData.id);
+        res.json({name,email,type,answered,_id});
       });
     } else {
       res.json(null);
@@ -150,34 +151,17 @@ app.get('/api/questions', async (req, res) => {
   }
 });
 
-// move to respone router
-// response post request
-// app.post('/api/response/write', async (req,res) => {
-//   mongoose.connect(process.env.MONGO_URL);
-//   const {user_id,user_answers} = req.body;
+app.put('/api/useranswered', async (req, res) => {
+  mongoose.connect(process.env.MONGO_URL);
+  try {
+    const {user_id} = req.body;
+    await User.updateOne({ _id: user_id }, { $set: { answered: 1 } })
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
 
-//   try {
-//     const responseDoc = await Response.create({
-//       user_id,
-//       user_answers
-//     });
-//     res.json(responseDoc);
-//   } catch (e) {
-//     res.status(422).json(e);
-//   }
-// });
-
-
-// // get response by user id
-// app.get('/api/response/get', async (req,res) => {
-//   console.log("in get response");
-//   mongoose.connect(process.env.MONGO_URL);
-//   const user_id = req.query.user_id
-//   const responseDoc = await Response.findOne({user_id});
-//   if (responseDoc) {
-//       res.json(responseDoc);
-//   }
-// });
 
 
 app.listen(4000);

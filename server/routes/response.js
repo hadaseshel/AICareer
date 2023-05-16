@@ -15,6 +15,7 @@ router.post('/', async (req,res) => {
       });
       res.json(responseDoc);
     } catch (e) {
+      console.log(e)
       res.status(422).json(e);
     }
   });

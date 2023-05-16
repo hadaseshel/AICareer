@@ -49,15 +49,23 @@ export default function QuestionsPage() {
         for (const key of Object.keys(answers)) {
             user_answers.push(parseInt(answers[key]));
         }
-        // Insert the last answer
-        //user_answers.push(parseInt(answer));
+
         try {
             await axios.post('/api/response', {user_id: user._id, user_answers: user_answers});
             setRedirect(true);
+            await axios.put('/api/useranswered', {user_id: user._id});
         } catch (e) {
             alert('Response failed');
             console.log(e)
+            return;
         }
+        // try {
+        //     await axios.put('/api/useranswered', {user_id: user._id});
+        //     setRedirect(true);
+        // } catch (e) {
+        //     alert('Response failed');
+        //     console.log(e)
+        // }
     };
 
 
@@ -73,7 +81,7 @@ export default function QuestionsPage() {
         return <Navigate to={'/login'} />
     }
 
-    if (redirect) {
+    if (redirect || user.answered === 1) {
         return <Navigate to={'/results'} />
     }
 

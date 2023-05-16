@@ -15,7 +15,8 @@ export default function RegisterPage() {
              name,
              email,
              password,
-             type:'normal'
+             type:'normal',
+             answered: 0
            });
            alert('Registration successful. Now you can log in');
          } catch (e) {
