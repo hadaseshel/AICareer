@@ -129,7 +129,7 @@ export default function EditHomePage() {
         } 
     }
 
-    if (isLoading != 1) {
+    if (isLoading < 1) {
         return(
             <div className="mx-auto max-w-2xl py-16 sm:py-32 lg:py-38">
                 <div className="text-center">

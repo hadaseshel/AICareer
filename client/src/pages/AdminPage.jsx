@@ -1,7 +1,8 @@
 import {useContext, useState} from "react";
 import {UserContext} from "../UserContext.jsx";
 import {Link, Navigate} from "react-router-dom";
-import EditHomePage from "./admin edit/EditHomePage.jsx"
+import EditHome from "./admin edit/EditHome.jsx"
+import EditQuestions from "./admin edit/EditQuestions.jsx"
 
 
 export default function AdminPage() {
@@ -67,7 +68,8 @@ export default function AdminPage() {
                     </button>
                 </div>
             </div>
-            {selectedButton === 0 && <EditHomePage />}
+            {selectedButton === 0 && <EditHome />}
+            {selectedButton === 1 && <EditQuestions />}
         </div>
     );
 
