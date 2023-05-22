@@ -2,13 +2,14 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 
 import { Table } from "./components/Table";
-import { Modal } from "./components/Modal";
 
 function EditQuestions() {
   const [modalOpen, setModalOpen] = useState(false);
   const [rows, setRows] = useState([]);
   const [rowToEdit, setRowToEdit] = useState(null);
   const [isLoading, setIsLoading] = useState(0);
+  const [nameInput,setNameInput] = useState("Name");
+  const [descriptionInput,setDescriptionInput] = useState("Description");
 
   useEffect(() => {
     async function fetchQuestions() {
@@ -40,6 +41,19 @@ function EditQuestions() {
           console.log(e);
       }
   }
+
+  // UPDATE the Values of section to the DB
+  async function updadeQuestion(path, name, description) {
+    console.log({name, description})
+    try {
+        await axios.put(path, { 
+            name: name,  
+            description: description});
+
+    } catch (e) {
+        console.log(e);
+    } 
+}
 
   const handleDeleteRow = (targetIndex) => {
     // update in the coded data
@@ -98,21 +112,8 @@ function EditQuestions() {
 
   return (
     <div>
-      <Table rows={rows} deleteRow={handleDeleteRow} editRow={handleEditRow} saveRow={handleSaveRow}  restorRow={handleRestorRow} changeRow={handleChangeRow}/>
-      <div className="mt-10 gap-x-6 text-center">
-        <button type="button" class="btn btn-outline-dark" onClick={()=>setModalOpen(true)}>Add</button>
-      </div>
-      {modalOpen && (
-        <Modal
-          closeModal={() => {
-            setModalOpen(false);
-            setRowToEdit(null);
-          }}
-          onSubmit={handleSubmit}
-          defaultValue={rowToEdit !== null && rows[rowToEdit]}
-        />
-      )}
-
+      <Table rows={rows} deleteRow={handleDeleteRow} editRow={handleEditRow} saveRow={handleSaveRow}  restorRow={handleRestorRow} changeRow={handleChangeRow}
+      nameInput={nameInput} setNameInput={setNameInput} descriptionInput={descriptionInput} setDescriptionInput={setDescriptionInput}/>
     </div>
   );
 }

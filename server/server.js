@@ -156,8 +156,20 @@ app.get('/api/questions/name', async (req, res) => {
   const {name} =  req.query;
   try {
     const question = await Question.find({name});
-    console.log(question)
     res.json(question);
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
+// get question by the name from DB
+app.put('/api/questions/name', async (req, res) => {
+  mongoose.connect(process.env.MONGO_URL);
+  const {name, description } =  req.body;
+  try {
+    const result = await Question.updateOne( { name },{ description });
+    res.json(result);
   } catch (err) {
     console.log(err);
     res.status(500).json({ error: 'Internal server error' });
