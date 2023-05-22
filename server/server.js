@@ -39,6 +39,8 @@ app.get('/test', (req, res) => {
     res.json('test ok');
 });
 
+/////// hail area ///////
+
 // register post request
 app.post('/api/register', async (req,res) => {
     mongoose.connect(process.env.MONGO_URL);
@@ -113,6 +115,22 @@ app.get('/api/users', async (req, res) => {
   }
 });
 
+app.put('/api/useranswered', async (req, res) => {
+  mongoose.connect(process.env.MONGO_URL);
+  try {
+    const {user_id} = req.body;
+    await User.updateOne({ _id: user_id }, { $set: { answered: 1 } })
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
+/////// hail area ///////
+
+
+/////// Hadas area ///////
+
 // get the number of Occupations in the DB
 app.get('/api/occupations', async (req, res) => {
   mongoose.connect(process.env.MONGO_URL);
@@ -150,20 +168,6 @@ app.get('/api/questions', async (req, res) => {
     res.status(500).json({ error: 'Internal server error' });
   }
 });
-
-// move to respone router
-// response post request
-// app.post('/api/response/write', async (req,res) => {
-//   mongoose.connect(process.env.MONGO_URL);
-//   const {name} =  req.query;
-//   try {
-//     const question = await Question.find({name});
-//     res.json(question);
-//   } catch (err) {
-//     console.log(err);
-//     res.status(500).json({ error: 'Internal server error' });
-//   }
-// });
 
 // get question by id from DB
 app.get('/api/questions/:id', async (req, res) => {
@@ -229,5 +233,7 @@ app.delete('/api/questions/:id', async (req, res) => {
     res.status(500).json({ error: 'Internal server error' });
   }
 });
+
+/////// Hadas area ///////
 
 app.listen(4000);
