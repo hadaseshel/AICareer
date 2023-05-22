@@ -27,7 +27,7 @@ export const Table = ({ rows, deleteRow, editRow ,saveRow, restorRow, changeRow,
                   {row.name}
                 </td>
                 <td className="expand">
-                  <input type="text" value={row.description} onChange={(e) => changeRow("description", e.target.value, idx, row)}></input>
+                  <input type="text" value={row.description} onChange={(e) => changeRow(e.target.value, idx, row)}></input>
                 </td>
                 <td className="fit">
                   <span className="actions">

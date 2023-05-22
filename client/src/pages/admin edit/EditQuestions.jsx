@@ -42,7 +42,7 @@ function EditQuestions() {
       }
   }
 
-  // UPDATE the Values of section to the DB
+  // UPDATE the description of qestion with name=name
   async function updadeQuestion(path, name, description) {
     console.log({name, description})
     try {
@@ -60,20 +60,20 @@ function EditQuestions() {
     setRows(rows.filter((_, idx) => idx !== targetIndex));
   };
 
-  const handleChangeRow = (field, value, targetIndex, row) => {
+  const handleChangeRow = (value, targetIndex, row) => {
     if(value !== null){
       setRows(
         rows.map((currRow, idx) => {
           if (idx !== targetIndex) return currRow;
-          if (field == "name") return {"name":value, "description": row.description}
-          if (field == "description") return {"name":row.name, "description": value}
+
+          return  {"name":row.name, "description": value}
         })
       );
     }
   };
 
   const handleSaveRow = (row,targetIndex) => {
-    
+    updadeQuestion("/api/questions/name", row.name, row.description);
   };
 
   const handleRestorRow = (row, targetIndex) => {
