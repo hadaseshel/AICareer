@@ -42,6 +42,10 @@ export const Modal = ({ closeModal, onSubmit, defaultValue }) => {
   };
 
   return (
+    <div>
+    <div className="modal">
+      loading
+    </div>
     <div
       className="modal-container"
       onClick={(e) => {
@@ -68,6 +72,7 @@ export const Modal = ({ closeModal, onSubmit, defaultValue }) => {
           </button>
         </form>
       </div>
+    </div>
     </div>
   );
 };

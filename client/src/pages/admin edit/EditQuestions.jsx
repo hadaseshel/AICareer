@@ -24,12 +24,49 @@ function EditQuestions() {
     fetchQuestions();   
     }, []);
 
+  async function getQuestion(path,nameOfQ) {
+    console.log("getQuestion", path, nameOfQ)
+      try {
+          const response = await axios.get(path, { params: { name: nameOfQ } });
+          const row =  response.data[0]
+          setRows(
+            rows.map((currRow, idx) => {
+              if (currRow.name !== row.name) return currRow;
+  
+              return row;
+            })
+          );
+      } catch (e) {
+          console.log(e);
+      }
+  }
+
   const handleDeleteRow = (targetIndex) => {
     // update in the coded data
     setRows(rows.filter((_, idx) => idx !== targetIndex));
   };
 
-  const handleEditRow = (idx, val) => {
+  const handleChangeRow = (field, value, targetIndex, row) => {
+    if(value !== null){
+      setRows(
+        rows.map((currRow, idx) => {
+          if (idx !== targetIndex) return currRow;
+          if (field == "name") return {"name":value, "description": row.description}
+          if (field == "description") return {"name":row.name, "description": value}
+        })
+      );
+    }
+  };
+
+  const handleSaveRow = (row,targetIndex) => {
+    
+  };
+
+  const handleRestorRow = (row, targetIndex) => {
+    getQuestion("/api/questions/name",row.name)
+  };
+
+  const handleEditRow = (idx) => {
     setRowToEdit(idx);
 
     setModalOpen(true);
@@ -61,9 +98,9 @@ function EditQuestions() {
 
   return (
     <div>
-      <Table rows={rows} deleteRow={handleDeleteRow} editRow={handleEditRow} />
+      <Table rows={rows} deleteRow={handleDeleteRow} editRow={handleEditRow} saveRow={handleSaveRow}  restorRow={handleRestorRow} changeRow={handleChangeRow}/>
       <div className="mt-10 gap-x-6 text-center">
-        <button type="button" class="btn btn-outline-dark" onClick={()=> setModalOpen(true)}>Add</button>
+        <button type="button" class="btn btn-outline-dark" onClick={()=>setModalOpen(true)}>Add</button>
       </div>
       {modalOpen && (
         <Modal
@@ -75,6 +112,7 @@ function EditQuestions() {
           defaultValue={rowToEdit !== null && rows[rowToEdit]}
         />
       )}
+
     </div>
   );
 }

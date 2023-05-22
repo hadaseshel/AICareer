@@ -7,7 +7,7 @@ import {GrRefresh} from 'react-icons/gr';
 
 import "./Table.css";
 
-export const Table = ({ rows, deleteRow, editRow }) => {
+export const Table = ({ rows, deleteRow, editRow ,saveRow, restorRow, changeRow}) => {
   return (
     <div className="table-wrapper">
       <table className="table">
@@ -22,15 +22,21 @@ export const Table = ({ rows, deleteRow, editRow }) => {
           {rows.map((row, idx) => {
             return (
               <tr key={idx}>
-                <td>{row.name}</td>
-                <td className="expand">{row.description}</td>
+                <td>
+                  {row.name}
+                </td>
+                <td className="expand">
+                  <input type="text" value={row.description} onChange={(e) => changeRow("description", e.target.value, idx, row)}></input>
+                </td>
                 <td className="fit">
                   <span className="actions">
                     <FaSave
                       className="save-btn"
+                      onClick={()=>saveRow(row, idx)}
                     />
                     <GrRefresh
-                      className="save-btn"
+                      className="refresh-btn"
+                      onClick={()=>restorRow(row, idx)}
                     />
                     <BsFillPencilFill
                       className="edit-btn"
