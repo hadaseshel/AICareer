@@ -150,6 +150,20 @@ app.get('/api/questions', async (req, res) => {
   }
 });
 
+// get question by the name from DB
+app.get('/api/questions/name', async (req, res) => {
+  mongoose.connect(process.env.MONGO_URL);
+  const {name} =  req.query;
+  try {
+    const question = await Question.find({name});
+    console.log(question)
+    res.json(question);
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
 // move to respone router
 // response post request
 // app.post('/api/response/write', async (req,res) => {
