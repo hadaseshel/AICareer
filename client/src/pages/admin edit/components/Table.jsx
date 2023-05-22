@@ -8,7 +8,7 @@ import {IoMdAddCircle} from "react-icons/io";
 
 import "./Table.css";
 
-export const Table = ({ rows, deleteRow, editRow ,saveRow, restorRow, changeRow, nameInput,setNameInput, descriptionInput,setDescriptionInput}) => {
+export const Table = ({ rows, deleteRow, newRow ,saveRow, restorRow, changeRow, nameInput,setNameInput, descriptionInput,setDescriptionInput}) => {
   return (
     <div className="table-wrapper">
       <table className="table">
@@ -33,15 +33,15 @@ export const Table = ({ rows, deleteRow, editRow ,saveRow, restorRow, changeRow,
                   <span className="actions">
                     <FaSave
                       className="save-btn"
-                      onClick={()=>saveRow(row, idx)}
+                      onClick={()=>saveRow(row)}
                     />
                     <GrRefresh
                       className="refresh-btn"
-                      onClick={()=>restorRow(row, idx)}
+                      onClick={()=>restorRow(row)}
                     />
                     <BsFillTrashFill
                       className="delete-btn"
-                      onClick={() => deleteRow(idx)}
+                      onClick={() => deleteRow(row, idx)}
                     />
                   </span>
                 </td>
@@ -59,6 +59,7 @@ export const Table = ({ rows, deleteRow, editRow ,saveRow, restorRow, changeRow,
                   <span className="actions">
                     <IoMdAddCircle
                       className="save-btn"
+                      onClick={()=>newRow()}
                     />
                   </span>
                 </td>

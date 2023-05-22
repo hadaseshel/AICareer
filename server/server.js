@@ -150,12 +150,28 @@ app.get('/api/questions', async (req, res) => {
   }
 });
 
-// get question by the name from DB
-app.get('/api/questions/name', async (req, res) => {
+// // get question by the name from DB
+// app.get('/api/questions/name', async (req, res) => {
+//   mongoose.connect(process.env.MONGO_URL);
+//   const {name} =  req.query;
+//   try {
+//     const question = await Question.find({name});
+//     res.json(question);
+//   } catch (err) {
+//     console.log(err);
+//     res.status(500).json({ error: 'Internal server error' });
+//   }
+// });
+
+// get question by id from DB
+app.get('/api/questions/:id', async (req, res) => {
   mongoose.connect(process.env.MONGO_URL);
-  const {name} =  req.query;
+  const questionId = req.params.id;
   try {
-    const question = await Question.find({name});
+    const question = await Question.findById(questionId);
+    if (!question) {
+      return res.status(404).json({ error: 'Question not found' });
+    }
     res.json(question);
   } catch (err) {
     console.log(err);
@@ -163,13 +179,49 @@ app.get('/api/questions/name', async (req, res) => {
   }
 });
 
-// get question by the name from DB
-app.put('/api/questions/name', async (req, res) => {
+
+// update data of questions by id
+app.put('/api/questions/:id', async (req, res) => {
   mongoose.connect(process.env.MONGO_URL);
-  const {name, description } =  req.body;
+  const questionId = req.params.id;
+  const { name, description } = req.body;
+
   try {
-    const result = await Question.updateOne( { name },{ description });
+    const result = await Question.findByIdAndUpdate(questionId, { name, description }, { new: true });
+    if (!result) {
+      return res.status(404).json({ error: 'Question not found' });
+    }
     res.json(result);
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
+// creat a new question
+app.post('/api/questions', async (req, res) => {
+  mongoose.connect(process.env.MONGO_URL);
+  const { name, description } = req.body;
+  try {
+    const question = new Question({ name, description });
+    const result = await question.save();
+    res.json(result);
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
+// delete a question
+app.delete('/api/questions/:id', async (req, res) => {
+  mongoose.connect(process.env.MONGO_URL);
+  const questionId = req.params.id;
+  try {
+    const result = await Question.findByIdAndDelete(questionId);
+    if (!result) {
+      return res.status(404).json({ error: 'Question not found' });
+    }
+    res.json({ message: 'Question deleted successfully' });
   } catch (err) {
     console.log(err);
     res.status(500).json({ error: 'Internal server error' });

@@ -4,12 +4,10 @@ import axios from "axios";
 import { Table } from "./components/Table";
 
 function EditQuestions() {
-  const [modalOpen, setModalOpen] = useState(false);
   const [rows, setRows] = useState([]);
-  const [rowToEdit, setRowToEdit] = useState(null);
   const [isLoading, setIsLoading] = useState(0);
-  const [nameInput,setNameInput] = useState("Name");
-  const [descriptionInput,setDescriptionInput] = useState("Description");
+  const [nameInput,setNameInput] = useState("");
+  const [descriptionInput,setDescriptionInput] = useState("");
 
   useEffect(() => {
     async function fetchQuestions() {
@@ -25,11 +23,12 @@ function EditQuestions() {
     fetchQuestions();   
     }, []);
 
-  async function getQuestion(path,nameOfQ) {
-    console.log("getQuestion", path, nameOfQ)
+  // get Question by id
+  async function getQuestion(questionId) {
+    const url =`/api/questions/${questionId}`; 
       try {
-          const response = await axios.get(path, { params: { name: nameOfQ } });
-          const row =  response.data[0]
+          const response = await axios.get(url);
+          const row = response.data
           setRows(
             rows.map((currRow, idx) => {
               if (currRow.name !== row.name) return currRow;
@@ -43,10 +42,10 @@ function EditQuestions() {
   }
 
   // UPDATE the description of qestion with name=name
-  async function updadeQuestion(path, name, description) {
-    console.log({name, description})
+  async function updadeQuestion(questionId, name, description) {
+    const url = `/api/questions/${questionId}`;
     try {
-        await axios.put(path, { 
+        await axios.put(url, { 
             name: name,  
             description: description});
 
@@ -55,9 +54,36 @@ function EditQuestions() {
     } 
 }
 
-  const handleDeleteRow = (targetIndex) => {
-    // update in the coded data
-    setRows(rows.filter((_, idx) => idx !== targetIndex));
+  // creat a qestion
+  async function creatQuestion(path, name, description) {
+    var data = {}
+    try {
+        const res = await axios.post(path, { name: name,  description: description});
+        data = res.data
+        if (nameInput!== "") {
+          setRows([...rows,  {"_id":data._id ,"name":data.name, "description": data.description}]);
+        }
+        setNameInput("");
+        setDescriptionInput("");
+    } catch (e) {
+        console.log(e);
+    }
+  }
+
+  // delete a qestion
+  async function deleteQuestion(questionId,targetIndex) {
+      const url = `/api/questions/${questionId}`;
+      try {
+        const response = await axios.delete(url);
+        // update in the coded data
+        setRows(rows.filter((_, idx) => idx !== targetIndex));
+      } catch (error) {
+        console.error(error);
+      }
+  }
+
+  const handleDeleteRow = (row, targetIndex) => {
+    deleteQuestion(row._id,targetIndex);
   };
 
   const handleChangeRow = (value, targetIndex, row) => {
@@ -66,36 +92,22 @@ function EditQuestions() {
         rows.map((currRow, idx) => {
           if (idx !== targetIndex) return currRow;
 
-          return  {"name":row.name, "description": value}
+          return  {"_id":row._id ,"name":row.name, "description": value}
         })
       );
     }
   };
 
-  const handleSaveRow = (row,targetIndex) => {
-    updadeQuestion("/api/questions/name", row.name, row.description);
+  const handleSaveRow = (row) => {
+    updadeQuestion(row._id, row.name, row.description);
   };
 
-  const handleRestorRow = (row, targetIndex) => {
-    getQuestion("/api/questions/name",row.name)
+  const handleRestorRow = (row) => {
+    getQuestion(row._id);
   };
 
-  const handleEditRow = (idx) => {
-    setRowToEdit(idx);
-
-    setModalOpen(true);
-  };
-
-  const handleSubmit = (newRow) => {
-    rowToEdit === null
-      ? setRows([...rows, newRow])
-      : setRows(
-          rows.map((currRow, idx) => {
-            if (idx !== rowToEdit) return currRow;
-
-            return newRow;
-          })
-        );
+  const handleNewRow = () => {
+    creatQuestion("/api/questions/",nameInput, descriptionInput);
   };
 
   if (isLoading != 1) {
@@ -112,7 +124,7 @@ function EditQuestions() {
 
   return (
     <div>
-      <Table rows={rows} deleteRow={handleDeleteRow} editRow={handleEditRow} saveRow={handleSaveRow}  restorRow={handleRestorRow} changeRow={handleChangeRow}
+      <Table rows={rows} deleteRow={handleDeleteRow} newRow={handleNewRow} saveRow={handleSaveRow}  restorRow={handleRestorRow} changeRow={handleChangeRow}
       nameInput={nameInput} setNameInput={setNameInput} descriptionInput={descriptionInput} setDescriptionInput={setDescriptionInput}/>
     </div>
   );
