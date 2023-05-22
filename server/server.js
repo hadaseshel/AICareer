@@ -162,6 +162,47 @@ app.put('/api/useranswered', async (req, res) => {
   }
 });
 
+// get question by the name from DB
+app.put('/api/questions/name', async (req, res) => {
+  mongoose.connect(process.env.MONGO_URL);
+  const {name, description } =  req.body;
+  try {
+    const result = await Question.updateOne( { name },{ description });
+    res.json(result);
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
+// move to respone router
+// response post request
+// app.post('/api/response/write', async (req,res) => {
+//   mongoose.connect(process.env.MONGO_URL);
+//   const {user_id,user_answers} = req.body;
+
+//   try {
+//     const responseDoc = await Response.create({
+//       user_id,
+//       user_answers
+//     });
+//     res.json(responseDoc);
+//   } catch (e) {
+//     res.status(422).json(e);
+//   }
+// });
+
+
+// // get response by user id
+// app.get('/api/response/get', async (req,res) => {
+//   console.log("in get response");
+//   mongoose.connect(process.env.MONGO_URL);
+//   const user_id = req.query.user_id
+//   const responseDoc = await Response.findOne({user_id});
+//   if (responseDoc) {
+//       res.json(responseDoc);
+//   }
+// });
 
 
 app.listen(4000);

@@ -3,11 +3,12 @@ import React from "react";
 import { BsFillTrashFill, BsFillPencilFill } from "react-icons/bs";
 import { FaSave } from 'react-icons/fa';
 import {GrRefresh} from 'react-icons/gr';
+import {IoMdAddCircle} from "react-icons/io";
 
 
 import "./Table.css";
 
-export const Table = ({ rows, deleteRow, editRow ,saveRow, restorRow, changeRow}) => {
+export const Table = ({ rows, deleteRow, editRow ,saveRow, restorRow, changeRow, nameInput,setNameInput, descriptionInput,setDescriptionInput}) => {
   return (
     <div className="table-wrapper">
       <table className="table">
@@ -38,10 +39,6 @@ export const Table = ({ rows, deleteRow, editRow ,saveRow, restorRow, changeRow}
                       className="refresh-btn"
                       onClick={()=>restorRow(row, idx)}
                     />
-                    <BsFillPencilFill
-                      className="edit-btn"
-                      onClick={() => editRow(idx)}
-                    />
                     <BsFillTrashFill
                       className="delete-btn"
                       onClick={() => deleteRow(idx)}
@@ -51,6 +48,21 @@ export const Table = ({ rows, deleteRow, editRow ,saveRow, restorRow, changeRow}
               </tr>
             );
           })}
+               <tr id="add newQ">
+                <td>
+                <input type="text" value={nameInput} onChange={(e) => setNameInput(e.target.value)}></input>
+                </td>
+                <td className="expand">
+                  <input type="text" value={descriptionInput} onChange={(e) => setDescriptionInput(e.target.value)}></input>
+                </td>
+                <td className="fit">
+                  <span className="actions">
+                    <IoMdAddCircle
+                      className="save-btn"
+                    />
+                  </span>
+                </td>
+              </tr>
         </tbody>
       </table>
     </div>
