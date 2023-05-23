@@ -7,15 +7,13 @@ from sklearn.metrics.pairwise import pairwise_distances
 
 
 class Recommender:
-    def __init__(self, strategy='user'):
-        self.strategy = strategy
+    def __init__(self):
         self.similarity = np.NaN
-        self.pred = np.NaN
-        self.user_item_matrix = pd.DataFrame()
+        #self.pred = np.NaN
+        self.user_response_matrix = pd.DataFrame()
 
     def fit(self, matrix):
-        " * ** YOUR CODE HERE ** * "
-        self.user_item_matrix = matrix
+        self.user_response_matrix = matrix
         np_matrix = matrix.to_numpy()
 
         # normalize the ratings
@@ -23,36 +21,20 @@ class Recommender:
         norm_matrix = np_matrix - u_mean_rating + 0.001
         norm_matrix[np.isnan(norm_matrix)] = 0
 
-        if self.strategy == 'user':
-            # User - User based collaborative filtering
-            start_time = time.time()
+         # User - User based collaborative filtering
+        start_time = time.time()
 
-            self.similarity = 1 - pairwise_distances(norm_matrix, metric='cosine')
-            self.pred = pd.DataFrame((u_mean_rating + self.similarity.dot(norm_matrix) / np.array(
-                [np.abs(self.similarity).sum(axis=1)]).T),  index=matrix.index, columns=matrix.columns)
-            self.pred = self.pred.round(2)
+        self.similarity = 1 - pairwise_distances(norm_matrix, metric='cosine')
+        #self.pred = pd.DataFrame((u_mean_rating + self.similarity.dot(norm_matrix) / np.array(
+         #   [np.abs(self.similarity).sum(axis=1)]).T),  index=matrix.index, columns=matrix.columns)
+        #self.pred = self.pred.round(2)
 
-            time_taken = time.time() - start_time
-            print('User Model in {} seconds'.format(time_taken))
+        time_taken = time.time() - start_time
+        print('User Model in {} seconds'.format(time_taken))
 
-            return self
+        return self
 
-        elif self.strategy == 'item':
-            # Item - Item based collaborative filtering
-            start_time = time.time()
-
-            self.similarity = 1 - pairwise_distances(norm_matrix.T, metric='cosine')
-            self.pred = pd.DataFrame((u_mean_rating + norm_matrix.dot(self.similarity) / np.array(
-                [np.abs(self.similarity).sum(axis=1)])), index=matrix.index, columns=matrix.columns)
-            self.pred = self.pred.round(2)
-
-            time_taken = time.time() - start_time
-            print('Item Model in {} seconds'.format(time_taken))
-
-            return self
-
-    def recommend_items(self, user_id, k=5):
-        " * ** YOUR CODE HERE ** * "
+    def recommend_professions(self, user_id, k=5):
         if user_id not in self.user_item_matrix.index:
             return None
 

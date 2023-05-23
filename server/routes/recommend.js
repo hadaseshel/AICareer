@@ -1,29 +1,49 @@
 const express = require('express');
 const { spawn } = require('child_process');
+const DatasetResponse = require('../models/DatasetResponse.js');
 const router = express.Router();
 
 router.use(express.json());
 
 // Endpoint to trigger recommendation calculations
-router.get('/', (req, res) => {
-  // Retrieve data from MongoDB collection
-  YourResponseModel.find({}, { responses: 1 })
-    .then((data) => {
-      const responses = data.map((item) => item.responses);
-      // Pass the data to the Python script
-      callPythonScript(responses)
-        .then((recommendations) => {
-          res.json({ recommendations });
-        })
-        .catch((error) => {
-          console.error('Error calling Python script:', error);
-          res.status(500).json({ error: 'An error occurred during recommendation calculations' });
-        });
-    })
-    .catch((error) => {
-      console.error('Error retrieving data from MongoDB:', error);
-      res.status(500).json({ error: 'An error occurred during data retrieval' });
-    });
+router.get('/', async (req, res) => {
+    const mappedFields = ['R1', 'R2', 'R3', 'R4', 'R5', 'R6', 'R7', 'R8',
+                            'I1', 'I2', 'I3', 'I4', 'I5', 'I6', 'I7', 'I8',
+                            'A1', 'A2', 'A3', 'A4', 'A5', 'A6', 'A7', 'A8',
+                            'S1', 'S2', 'S3', 'S4', 'S5', 'S6', 'S7', 'S8',
+                            'E1', 'E2', 'E3', 'E4', 'E5', 'E6', 'E7', 'E8',
+                            'C1', 'C2', 'C3', 'C4', 'C5', 'C6', 'C7', 'C8', 'occupation']
+    mongoose.connect(process.env.MONGO_URL);
+    try {
+        const documents = await DatasetResponse.find().toArray();
+        if (documents) {
+
+            // Process documents and create JSON object called responses (doc._id: {answers + proffesion})
+            const responses = {};
+            documents.forEach((document) => {
+                const mappedFieldsData = {};
+                mappedFields.forEach((field) => {
+                    if (document.hasOwnProperty(field)) {
+                    mappedFieldsData[field] = document[field];
+                    }
+                });
+                responses[document._id] = mappedFieldsData;
+            });
+            
+            // Pass the data to the Python script and get the recommended proffesions
+            callPythonScript(responses)
+                .then((recommendations) => {
+                    res.json({ recommendations });
+                })
+                .catch((err) => {
+                    console.log(err);
+                    res.status(500).json({ error: 'Internal server error' });
+                });
+        }
+    } catch (err) {
+        console.log(err);
+        res.status(500).json({ error: 'Internal server error' });
+    }
 });
 
 // Function to call the Python script
