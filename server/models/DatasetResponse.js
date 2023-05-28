@@ -27,7 +27,7 @@ const DatasetResponseSchema = new Schema({
   code: String,
   occupation: String,
   occupationcode: String,
-});
+}, { collection: 'Questionnaire Responses' });
 
 const DatasetResponseModel = mongoose.model('DatasetResponse', DatasetResponseSchema);
 
