@@ -23,7 +23,7 @@ router.get('/', async (req, res) => {
     mongoose.connect(process.env.MONGO_URL);
     try {
         console.log("ACCESS TO DB");
-        const documents = await DatasetResponse.find().limit(2).select(mappedFields);
+        const documents = await DatasetResponse.find().limit(10).select(mappedFields);
         console.log("Documnet To Json");
         count = 0
         if (documents) {
@@ -39,7 +39,7 @@ router.get('/', async (req, res) => {
                 responses[document._id] = mappedFieldsData;
             });
 
-            console.log(responses)
+            //console.log(responses)
             
             console.log("CALL PYTHON SCRIPT");
             // Pass the data to the Python script and get the recommended proffesions

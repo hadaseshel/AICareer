@@ -31,7 +31,7 @@ class Recommender:
         self.similarity = 1 - pairwise_distances(norm_matrix, metric='cosine')
         self.similarity = pd.DataFrame((self.similarity),  index=self.user_response_matrix.index,
                                        columns=self.user_response_matrix.index)
-        self.similarity.to_csv('output5.csv', index=True)
+        #self.similarity.to_csv('output5.csv', index=True)
 
         #time_taken = time.time() - start_time
         #print('User Model in {} seconds'.format(time_taken))
@@ -40,14 +40,26 @@ class Recommender:
 
     def recommend_professions(self, user_id, k=5):
 
-        # get the similarity of the user to the others
+        # get the similarity row of the user to the other users
         similarity_row = self.similarity.loc[[user_id]].copy()
-        similarity_row.to_csv('output4.csv', index=True)
 
         # drop the similarity to the user itself
         similarity_row_without_user = similarity_row.drop([user_id], axis=1)
+        #similarity_row_without_user.to_csv('output4.csv', index=True)
         top_k = similarity_row_without_user.iloc[0].nlargest(k)
         #top_k = similarity_row_without_user[user_id].sort_values(ascending=False, kind='stable').head(k)
+
         top_k = top_k.index
         rec_values = self.user_response_proff_matrix.loc[top_k, 'occupation'].tolist()
-        return rec_values
+
+        similarity_row_after_choice = similarity_row_without_user
+
+        # For case that there are duplicate proffesions
+        while len(set(rec_values)) < k:
+            similarity_row_after_choice = similarity_row_after_choice.drop(top_k, axis=1)
+            #similarity_row_after_choice.to_csv('output6.csv', index=True)
+            top_k = similarity_row_after_choice.iloc[0].nlargest(1).index
+            new_rec_value = self.user_response_proff_matrix.loc[top_k, 'occupation'].tolist()
+            rec_values = rec_values + new_rec_value
+
+        return list(set(rec_values))
