@@ -22,3 +22,6 @@
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+server/cf_model/recommendation_system/__pycache__/collaborative_filtering.cpython-38.pyc
+server/cf_model/recommendation_system/__pycache__/data.cpython-38.pyc
+server/cf_model/recommendation_system/__pycache__/evaluation.cpython-38.pyc
