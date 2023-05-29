@@ -1,10 +1,9 @@
-import {useContext, useState} from "react";
+import {useContext, useState, useEffect} from "react";
 import axios from "axios";
 import {UserContext} from "../UserContext";
 
 export default function ResultsPage() {
     const {ready, user} = useContext(UserContext);
-    //const [answers, set_answers] = useState({})
 
     async function getRecommendation(user_answers) {
         try {
@@ -17,27 +16,28 @@ export default function ResultsPage() {
         }
     }
 
-    async function getAnswers() {
-        try {
-            console.log("IN GET ANSWERS");
-            console.log( user._id);
-            const response = await axios.get('/api/response', { params: { user_id: user._id } });
-            const user_answers = response.data.user_answers;
-            //console.log(user_answers);
-            getRecommendation(user_answers)
-        } catch (e) {
-            console.log(e);
-        }
-    }
+    useEffect(() => {
+        if (ready && user) {
+            async function getAnswers() {
+            try {
+                console.log("IN GET ANSWERS");
+                console.log(user._id);
+                const response = await axios.get("/api/response", {
+                params: { user_id: user._id },
+                });
+                const user_answers = response.data.user_answers;
+                getRecommendation(user_answers);
+            } catch (e) {
+                console.log(e);
+            }
+            }
+            getAnswers();
+        }   
+      }, [ready, user]);
 
-    if (!ready || !user) {
+      if (!ready || !user) {
         return 'Loading...';
-    }
-    //getAnswers()
-
-    
-
-    getAnswers();
+      }
     
     return (
         <div className="text-center max-w-lg mx-auto mt-10">

@@ -22,35 +22,29 @@ router.get('/', async (req, res) => {
     //});
     mongoose.connect(process.env.MONGO_URL);
     try {
-        console.log("ACCESS TO DB");
-        const documents = await DatasetResponse.find().limit(10).select(mappedFields);
-        console.log("Documnet To Json");
-        count = 0
+        const documents = await DatasetResponse.find().limit(15000).select(mappedFields);
         if (documents) {
-            //count = count + 1;
+          //count = count + 1;
 
-            // Process documents and create JSON object called responses (doc._id: {answers + proffesion})
-            const responses = {};
-            documents.forEach((document) => {
-                const mappedFieldsData = {};
-                mappedFields.forEach((field) => {
-                    mappedFieldsData[field] = document[field];
-                });
-                responses[document._id] = mappedFieldsData;
-            });
-
-            //console.log(responses)
-            
-            console.log("CALL PYTHON SCRIPT");
-            // Pass the data to the Python script and get the recommended proffesions
-            callPythonScript(responses, user_id, user_answers)
-                .then((recommendations) => {
-                    res.json({ recommendations });
-                })
-                .catch((err) => {
-                    console.log(err);
-                    res.status(500).json({ error: 'Internal server error' });
-                });
+          // Process documents and create JSON object called responses (doc._id: {answers + proffesion})
+          const responses = {};
+          documents.forEach((document) => {
+              const mappedFieldsData = {};
+              mappedFields.forEach((field) => {
+                  mappedFieldsData[field] = document[field];
+              });
+              responses[document._id] = mappedFieldsData;
+          });
+          
+          // Pass the data to the Python script and get the recommended proffesions
+          callPythonScript(responses, user_id, user_answers)
+              .then((recommendations) => {
+                  res.json({ recommendations });
+              })
+              .catch((err) => {
+                  console.log(err);
+                  res.status(500).json({ error: 'Internal server error' });
+              });
         }
     } catch (err) {
         console.log(err);
@@ -60,21 +54,16 @@ router.get('/', async (req, res) => {
 
 // Function to call the Python script
 function callPythonScript(data, user_id, user_answers) {
-  console.log(" IN CALL PYTHON SCRIPT");
-  console.log(user_answers);
-  //"C:\Users\lenovo\VisualStudioCodeProjects\AIcareer\ReactAICareer\server\routes\recommend.js"
   return new Promise((resolve, reject) => {
     const scriptPath = path.resolve(__dirname, '../cf_model/cf_script.py');
     const pythonProcess = spawn('python', [scriptPath, user_id, JSON.stringify(user_answers)]);
 
     let recommendations = ''
 
-    console.log("WRITE TO PYTHON SCRIPT");
     // Send data to the Python process
     pythonProcess.stdin.write(JSON.stringify(data));
     pythonProcess.stdin.end();
 
-    console.log("GET FROM PYTHON SCRIPT");
     // Capture the output from the Python process
     pythonProcess.stdout.on('data', (data) => {
       recommendations += data.toString();
@@ -87,7 +76,6 @@ function callPythonScript(data, user_id, user_answers) {
     // Handle the completion of the Python process
     pythonProcess.on('close', (code) => {
       if (code === 0) {
-        console.log("IN CLOSE PYTHON")
         resolve(JSON.parse(recommendations));
       } else {
         reject('An error occurred during recommendation calculations');
