@@ -59,13 +59,6 @@ export default function AdminPage() {
                     >
                         Edit questionnaire
                     </button>
-                    <button
-                        type="button"
-                        className={`btn ${selectedButton === 2 ? 'btn-success' : 'btn-outline-success'}`}
-                        onClick={() => handleButtonClick(2)}
-                    >
-                        Edit DataBase
-                    </button>
                 </div>
             </div>
             {selectedButton === 0 && <EditHome />}

@@ -95,7 +95,7 @@ export default function EditHomePage() {
         getSectionOf(putSectionOfMarket,'/api/home', "market status");
 
         getNumberOf(setNumberOfUsers,'/api/users');
-        getNumberOf(setNumberOfOccupations,'/api/occupations');
+        getNumberOf(setNumberOfOccupations,'/api/occupations/count');
         getNumberOf(setNumberOfQuestions,'/api/questions/count');
         
     },[]);

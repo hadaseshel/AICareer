@@ -9,6 +9,8 @@ const Question = require('./models/Question.js');
 const Home = require('./models/Home.js');
 const Response = require('./models/Response.js');
 const HomeRouter = require('./routes/home.js');
+const QuestionsRouter = require('./routes/questions.js');
+const OccupationsRouter = require('./routes/occupations.js');
 const ResponseRouter = require('./routes/response.js');
 const RecommendRouter = require('./routes/recommend.js');
 const cookieParser = require('cookie-parser');
@@ -28,6 +30,12 @@ app.use(cors({
   }));
 
 mongoose.connect(process.env.MONGO_URL);
+
+// route the occupations
+app.use('/api/occupations',OccupationsRouter)
+
+// route the questions
+app.use('/api/questions',QuestionsRouter)
 
 // route the home 
 app.use('/api/home',HomeRouter)
@@ -132,112 +140,5 @@ app.put('/api/useranswered', async (req, res) => {
 
 /////// hail area ///////
 
-
-/////// Hadas area ///////
-
-// get the number of Occupations in the DB
-app.get('/api/occupations', async (req, res) => {
-  mongoose.connect(process.env.MONGO_URL);
-  try {
-    const count = await Occupation.countDocuments({});
-    res.json(count);
-  } catch (err) {
-    console.log(err);
-    res.status(500).json({ error: 'Internal server error' });
-  }
-});
-
-// get the number of questions in the Questionnaire in the DB
-app.get('/api/questionnaire', async (req, res) => {
-  mongoose.connect(process.env.MONGO_URL);
-  try {
-    const count = await Question.countDocuments({});
-    res.json(count);
-  } catch (err) {
-    console.log(err);
-    res.status(500).json({ error: 'Internal server error' });
-  }
-});
-
-// get questions from DB
-app.get('/api/questions', async (req, res) => {
-  mongoose.connect(process.env.MONGO_URL);
-  try {
-    const questions = await Question.find().sort( { "$natural": 1 } );
-    if (questions) {
-      res.json(questions);
-    }
-  } catch (err) {
-    console.log(err);
-    res.status(500).json({ error: 'Internal server error' });
-  }
-});
-
-// get question by id from DB
-app.get('/api/questions/:id', async (req, res) => {
-  mongoose.connect(process.env.MONGO_URL);
-  const questionId = req.params.id;
-  try {
-    const question = await Question.findById(questionId);
-    if (!question) {
-      return res.status(404).json({ error: 'Question not found' });
-    }
-    res.json(question);
-  } catch (err) {
-    console.log(err);
-    res.status(500).json({ error: 'Internal server error' });
-  }
-});
-
-
-// update data of questions by id
-app.put('/api/questions/:id', async (req, res) => {
-  mongoose.connect(process.env.MONGO_URL);
-  const questionId = req.params.id;
-  const { name, description } = req.body;
-
-  try {
-    const result = await Question.findByIdAndUpdate(questionId, { name, description }, { new: true });
-    if (!result) {
-      return res.status(404).json({ error: 'Question not found' });
-    }
-    res.json(result);
-  } catch (err) {
-    console.log(err);
-    res.status(500).json({ error: 'Internal server error' });
-  }
-});
-
-// creat a new question
-app.post('/api/questions', async (req, res) => {
-  mongoose.connect(process.env.MONGO_URL);
-  const { name, description } = req.body;
-  try {
-    const question = new Question({ name, description });
-    const result = await question.save();
-    res.json(result);
-  } catch (err) {
-    console.log(err);
-    res.status(500).json({ error: 'Internal server error' });
-  }
-});
-
-// delete a question
-app.delete('/api/questions/:id', async (req, res) => {
-  mongoose.connect(process.env.MONGO_URL);
-  const questionId = req.params.id;
-  try {
-    const result = await Question.findByIdAndDelete(questionId);
-    if (!result) {
-      return res.status(404).json({ error: 'Question not found' });
-    }
-    res.json({ message: 'Question deleted successfully' });
-  } catch (err) {
-    console.log(err);
-    res.status(500).json({ error: 'Internal server error' });
-  }
-});
-
-/////// Hadas area ///////
 
 app.listen(4000);
