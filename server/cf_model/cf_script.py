@@ -6,19 +6,23 @@ from recommendation_system.collaborative_filtering import Recommender
 
 
 # Load the data passed from the Node.js server
-dataset = pd.read_json(sys.stdin)
-#data = json.load(sys.stdin)
-user_id = sys.argv[1]
+# Read JSON data from stdin
+data = json.loads(sys.stdin.read())
 
-user_response_matrix_raw = pd.pivot_table(dataset, index='UserId',
-                                          columns='ProductId', values='Rating', aggfunc=np.sum)
-print(user_item_matrix_raw.head())
+# Convert JSON data to DataFrame
+user_response_matrix_raw = pd.DataFrame.from_dict(data, orient='index')
+
+user_id = sys.argv[1]
+str_user_answers = sys.argv[2]
+
+str_user_answers = json.loads(str_user_answers)
+user_answers = list(map(int, str_user_answers))
 
 # Instantiate your recommendation system
-recommendation_system = Recommender()
+recommender = Recommender().fit(user_response_matrix_raw, user_id, user_answers)
 
 # Process the data and perform recommendation calculations
-recommendations = recommendation_system.reommend_items(user_id, k=5)
+recommendations = recommender.recommend_professions(user_id, k=5)
 
 # Return the recommendations to the Node.js server
 print(json.dumps(recommendations))

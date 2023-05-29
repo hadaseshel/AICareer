@@ -7,58 +7,48 @@ from sklearn.metrics.pairwise import pairwise_distances
 
 
 class Recommender:
-    def __init__(self, strategy='user'):
-        self.strategy = strategy
+    def __init__(self):
         self.similarity = np.NaN
-        self.pred = np.NaN
-        self.user_item_matrix = pd.DataFrame()
+        self.user_response_proff_matrix = pd.DataFrame()
+        self.user_response_matrix = pd.DataFrame()
 
-    def fit(self, matrix):
-        " * ** YOUR CODE HERE ** * "
-        self.user_item_matrix = matrix
-        np_matrix = matrix.to_numpy()
+    def fit(self, matrix, user_id, user_answers):
+        self.user_response_proff_matrix = matrix
+        self.user_response_matrix = self.user_response_proff_matrix.drop(['occupation'], axis=1)
+
+        self.user_response_matrix.loc[user_id] = user_answers
+        np_matrix = self.user_response_matrix.values
 
         # normalize the ratings
-        u_mean_rating = matrix.mean(axis=1).to_numpy().reshape(-1, 1)
-        norm_matrix = np_matrix - u_mean_rating + 0.001
-        norm_matrix[np.isnan(norm_matrix)] = 0
+        u_mean_answers = np.mean(np_matrix, axis=1).reshape(-1, 1) # not good
+        norm_matrix = np_matrix - u_mean_answers + 0.001
 
-        if self.strategy == 'user':
-            # User - User based collaborative filtering
-            start_time = time.time()
+        self.similarity = 1 - pairwise_distances(norm_matrix, metric='cosine')
+        self.similarity = pd.DataFrame((self.similarity),  index=self.user_response_matrix.index,
+                                       columns=self.user_response_matrix.index)
 
-            self.similarity = 1 - pairwise_distances(norm_matrix, metric='cosine')
-            self.pred = pd.DataFrame((u_mean_rating + self.similarity.dot(norm_matrix) / np.array(
-                [np.abs(self.similarity).sum(axis=1)]).T),  index=matrix.index, columns=matrix.columns)
-            self.pred = self.pred.round(2)
+        return self
 
-            time_taken = time.time() - start_time
-            print('User Model in {} seconds'.format(time_taken))
+    def recommend_professions(self, user_id, k=5):
 
-            return self
+        # get the similarity row of the user to the other users
+        similarity_row = self.similarity.loc[[user_id]].copy()
 
-        elif self.strategy == 'item':
-            # Item - Item based collaborative filtering
-            start_time = time.time()
+        # drop the similarity to the user itself
+        similarity_row_without_user = similarity_row.drop([user_id], axis=1)
 
-            self.similarity = 1 - pairwise_distances(norm_matrix.T, metric='cosine')
-            self.pred = pd.DataFrame((u_mean_rating + norm_matrix.dot(self.similarity) / np.array(
-                [np.abs(self.similarity).sum(axis=1)])), index=matrix.index, columns=matrix.columns)
-            self.pred = self.pred.round(2)
+        top_k = similarity_row_without_user.iloc[0].nlargest(k)
 
-            time_taken = time.time() - start_time
-            print('Item Model in {} seconds'.format(time_taken))
-
-            return self
-
-    def recommend_items(self, user_id, k=5):
-        " * ** YOUR CODE HERE ** * "
-        if user_id not in self.user_item_matrix.index:
-            return None
-
-        predicted_ratings_row = self.pred.loc[user_id].copy()
-        data_matrix_row = self.user_item_matrix.loc[user_id]
-        predicted_ratings_unrated = predicted_ratings_row[np.isnan(data_matrix_row)]
-        top_k = predicted_ratings_unrated.sort_values(ascending=False, kind='stable').head(k)
         top_k = top_k.index
-        return list(top_k)
+        rec_values = self.user_response_proff_matrix.loc[top_k, 'occupation'].tolist()
+
+        similarity_row_after_choice = similarity_row_without_user
+
+        # For case that there are duplicate proffesions
+        while len(set(rec_values)) < k:
+            similarity_row_after_choice = similarity_row_after_choice.drop(top_k, axis=1)
+            top_k = similarity_row_after_choice.iloc[0].nlargest(1).index
+            new_rec_value = self.user_response_proff_matrix.loc[top_k, 'occupation'].tolist()
+            rec_values = rec_values + new_rec_value
+
+        return list(set(rec_values))

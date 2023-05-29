@@ -10,6 +10,7 @@ const Home = require('./models/Home.js');
 const Response = require('./models/Response.js');
 const HomeRouter = require('./routes/home.js');
 const ResponseRouter = require('./routes/response.js');
+const RecommendRouter = require('./routes/recommend.js');
 const cookieParser = require('cookie-parser');
 
 require('dotenv').config()
@@ -33,6 +34,9 @@ app.use('/api/home',HomeRouter)
 
 // route the response 
 app.use('/api/response',ResponseRouter)
+
+// route the recommend 
+app.use('/api/recommend',RecommendRouter)
 
 
 app.get('/test', (req, res) => {
@@ -159,7 +163,7 @@ app.get('/api/questionnaire', async (req, res) => {
 app.get('/api/questions', async (req, res) => {
   mongoose.connect(process.env.MONGO_URL);
   try {
-    const questions = await Question.find().sort( { "$natural": 1 } ).limit(4);
+    const questions = await Question.find().sort( { "$natural": 1 } );
     if (questions) {
       res.json(questions);
     }
