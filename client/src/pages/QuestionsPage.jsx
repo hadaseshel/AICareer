@@ -53,7 +53,7 @@ export default function QuestionsPage() {
         try {
             await axios.post('/api/response', {user_id: user._id, user_answers: user_answers});
             setRedirect(true);
-            await axios.put('/api/useranswered', {user_id: user._id});
+            await axios.put('/api/user/useranswered', {user_id: user._id});
         } catch (e) {
             alert('Response failed');
             console.log(e)

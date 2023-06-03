@@ -94,7 +94,7 @@ export default function EditHomePage() {
         getSectionOf(putSectionOfNumbers,'/api/home', "numbers of app");
         getSectionOf(putSectionOfMarket,'/api/home', "market status");
 
-        getNumberOf(setNumberOfUsers,'/api/users');
+        getNumberOf(setNumberOfUsers,'/api/user/users');
         getNumberOf(setNumberOfOccupations,'/api/occupations/count');
         getNumberOf(setNumberOfQuestions,'/api/questions/count');
         
