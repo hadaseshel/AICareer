@@ -2,29 +2,74 @@ const mongoose = require('mongoose');
 const express = require('express');
 const { spawn } = require('child_process');
 const DatasetResponse = require('../models/DatasetResponse.js');
+const Result = require('../models/Result.js');
 const path = require('path');
 const router = express.Router();
 
 router.use(express.json());
 
+// result gett request
+router.get('/result', async (req, res) => {
+  mongoose.connect(process.env.MONGO_URL);
+  const {user_id} = req.query;
+  try {
+    const responseDoc = await Result.findOne({user_id});
+    res.json(responseDoc);
+  }  catch (e) {
+    console.log(e)
+    res.status(422).json(e);
+  }
+});
+
+
+// result post request
+router.post('/result', async (req,res) => {
+  mongoose.connect(process.env.MONGO_URL);
+  const {user_id,results} = req.body;
+  try {
+    const responseDoc = await Result.create({
+      user_id,
+      results
+    });
+    res.json(responseDoc);
+  } catch (e) {
+    console.log(e)
+    res.status(422).json(e);
+  }
+});
+
+
 // Endpoint to trigger recommendation calculations
 router.get('/', async (req, res) => {
     const {user_id, user_answers} = req.query;
-    const mappedFields = ['R1', 'R2', 'R3', 'R4', 'R5', 'R6', 'R7', 'R8',
-                            'I1', 'I2', 'I3', 'I4', 'I5', 'I6', 'I7', 'I8',
-                            'A1', 'A2', 'A3', 'A4', 'A5', 'A6', 'A7', 'A8',
-                            'S1', 'S2', 'S3', 'S4', 'S5', 'S6', 'S7', 'S8',
-                            'E1', 'E2', 'E3', 'E4', 'E5', 'E6', 'E7', 'E8',
-                            'C1', 'C2', 'C3', 'C4', 'C5', 'C6', 'C7', 'C8', 'occupation']
-    //let fields = ""
-    //mappedFields.forEach((field) => {
-    //    fields = fields + field + " "
-    //});
+
+    var mappedFields = []
+
     mongoose.connect(process.env.MONGO_URL);
+
+    // Get the fields we want to insert to the data we send to recommendation system
     try {
-        const documents = await DatasetResponse.find().limit(15000).select(mappedFields);
-        if (documents) {
-          //count = count + 1;
+      console.log("TRY 1")
+        const one_document = await DatasetResponse.findOne()
+        const fields_to_filter = ["occupationcode", "_id"]
+        mappedFields = Object.keys(one_document._doc)
+        fields_to_filter.forEach((field) => {
+          var index = mappedFields.indexOf(field);
+          if (index !== -1) {
+            mappedFields.splice(index, 1);
+          }
+        });
+    } catch (err) {
+        console.log(err);
+        res.status(500).json({ error: 'Internal server error' });
+    }
+
+
+    // Get the the data we send to recommendation system
+    try {
+      
+      const documents = await DatasetResponse.find().limit(15000);
+      if (documents) {
 
           // Process documents and create JSON object called responses (doc._id: {answers + proffesion})
           const responses = {};
@@ -36,7 +81,7 @@ router.get('/', async (req, res) => {
               responses[document._id] = mappedFieldsData;
           });
           
-          // Pass the data to the Python script and get the recommended proffesions
+          //Pass the data to the Python script and get the recommended proffesions
           callPythonScript(responses, user_id, user_answers)
               .then((recommendations) => {
                   res.json({ recommendations });
@@ -51,6 +96,8 @@ router.get('/', async (req, res) => {
         res.status(500).json({ error: 'Internal server error' });
     }
 });
+
+
 
 // Function to call the Python script
 function callPythonScript(data, user_id, user_answers) {
@@ -83,5 +130,40 @@ function callPythonScript(data, user_id, user_answers) {
     });
   });
 }
+
+// option to try2
+// var responses = {}
+      // const cursor = DatasetResponse.find({}).lean().cursor();
+      // //const responses = {};
+
+      // let count = 0; // Counter for the fetched documents
+
+      // cursor.on('data', (document) => {
+      //   // Perform your desired action on each document
+      //   const mappedFieldsData = {};
+      //   mappedFields.forEach((field) => {
+      //       mappedFieldsData[field] = document[field];
+      //   });
+      //   responses[document._id] = mappedFieldsData;
+
+      //   count++;
+
+      //   if (count >= limit) {
+      //     cursor.close(); // Close the cursor if the limit is reached
+      //   }
+      // });
+
+      // cursor.on('end', () => {
+      //   callPythonScript(responses, user_id, user_answers)
+      //         .then((recommendations) => {
+      //             res.json({ recommendations });
+      //         })
+      //         .catch((err) => {
+      //             console.log(err);
+      //             res.status(500).json({ error: 'Internal server error' });
+      //         });
+      // });
+      
+
 
 module.exports = router;

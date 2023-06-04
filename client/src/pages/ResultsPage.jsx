@@ -4,14 +4,25 @@ import {UserContext} from "../UserContext";
 
 export default function ResultsPage() {
     const {ready, user} = useContext(UserContext);
+    const [results, setResults] = useState([])
+
 
     async function getRecommendation(user_answers) {
+
+        // try to get the recommendation from DB if exist.
         try {
-            console.log("IN GET REC");
-            //console.log(user_answers);
-            const {data} = await axios.get('/api/recommend', {params: {user_id: user._id, user_answers: user_answers}});
-            console.log(data);
-        }  catch (e) {
+            const response = await axios.get("/api/result", {
+                params: { user_id: user._id },
+            });
+            const user_results = response.data.results;
+            setResults(user_results)
+            if (!user_results) {
+                console.log("IN GET REC");
+                const {data} = await axios.get('/api/recommend', {params: {user_id: user._id, user_answers: user_answers}});
+                await axios.post('/api/result', {user_id: user._id, user_answers: data.recommendations});
+                setResults(data.recommendations);
+            }
+        } catch (e) {
             console.log(e);
         }
     }
@@ -19,17 +30,18 @@ export default function ResultsPage() {
     useEffect(() => {
         if (ready && user) {
             async function getAnswers() {
-            try {
-                console.log("IN GET ANSWERS");
-                console.log(user._id);
-                const response = await axios.get("/api/response", {
-                params: { user_id: user._id },
-                });
-                const user_answers = response.data.user_answers;
-                getRecommendation(user_answers);
-            } catch (e) {
-                console.log(e);
-            }
+                
+                try {
+                    console.log("IN GET ANSWERS");
+                    console.log(user._id);
+                    const response = await axios.get("/api/response", {
+                        params: { user_id: user._id },
+                    });
+                    const user_answers = response.data.user_answers;
+                    getRecommendation(user_answers);
+                } catch (e) {
+                    console.log(e);
+                }
             }
             getAnswers();
         }   
