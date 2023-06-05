@@ -70,11 +70,24 @@ export default function QuestionsPage() {
 
 
     if (questions.length === 0) {
-        return 'Loading...';
+        return (
+            <div className="mx-auto max-w-2xl py-16 sm:py-32 lg:py-38">
+            <div className="text-center">
+                <h1 className="text-4xl font-bold tracking-tight text-gray-900 sm:text-6xl">
+                    Loading...
+                </h1>
+            </div>
+        </div>);
     }
 
     if (!ready) {
-        return 'Loading...';
+        return (<div className="mx-auto max-w-2xl py-16 sm:py-32 lg:py-38">
+                    <div className="text-center">
+                        <h1 className="text-4xl font-bold tracking-tight text-gray-900 sm:text-6xl">
+                            Loading...
+                        </h1>
+                    </div>
+                </div>);
     }
 
     if (ready && !user && !redirect) {
@@ -100,7 +113,7 @@ export default function QuestionsPage() {
     };
 
     return (
-        <div className="text-center mt-10">
+        <div className="text-center mt-16">
             <ProgressBar style={{width: 850, height: 20}}>
                 <ProgressBar striped variant="success" now={((currentQuestionIndex + 1) / questions.length) * 100 }/> 
             </ProgressBar>

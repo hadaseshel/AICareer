@@ -52,7 +52,15 @@ export default function ResultsPage() {
     }, [ready, user]);
 
     if (!ready || !user) {
-        return 'Loading...';
+        return (<div className="d-flex flex-column align-items-center justify-content-center mt-40">
+                    <div className="row mb-10">
+                        <div className="spinner-border text-success" style={{width: 150, height: 150}} role="status">
+                        </div>
+                    </div>
+                    <div className="row mt-10">
+                        <h1 className="font-bold tracking-tight text-gray-900" style={{ fontSize: "2rem" }}>Loading...</h1>
+                    </div>
+                </div>);
     }
 
     if (results.length < 1) {
@@ -60,11 +68,10 @@ export default function ResultsPage() {
             <div className="d-flex flex-column align-items-center justify-content-center mt-40">
                 <div className="row mb-10">
                     <div className="spinner-border text-success" style={{width: 150, height: 150}} role="status">
-                        <span className="sr-only">Loading...</span>
                     </div>
                 </div>
                 <div className="row mt-10">
-                    <h1 style={{ fontSize: "2rem" }}>We process your answers...</h1>
+                    <h1 className="font-bold tracking-tight text-gray-900" style={{ fontSize: "2rem" }}>We process your answers...</h1>
                 </div>
             </div>
        );
