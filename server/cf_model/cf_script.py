@@ -1,7 +1,6 @@
 import sys
 import json
-from recommendation_system.data import *
-from recommendation_system.evaluation import *
+import pandas as pd
 from recommendation_system.collaborative_filtering import Recommender
 
 

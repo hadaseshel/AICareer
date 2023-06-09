@@ -111,6 +111,12 @@ function callPythonScript(data, user_id, user_answers) {
     pythonProcess.stdin.write(JSON.stringify(data));
     pythonProcess.stdin.end();
 
+    // Handle errors when writing to the Python process
+    pythonProcess.stdin.on('error', (err) => {
+      console.error('Error writing to the Python process:', err);
+      reject(err);
+    });
+
     // Capture the output from the Python process
     pythonProcess.stdout.on('data', (data) => {
       recommendations += data.toString();
@@ -127,6 +133,12 @@ function callPythonScript(data, user_id, user_answers) {
       } else {
         reject('An error occurred during recommendation calculations');
       }
+    });
+
+    // Handle errors when the Python process exits with an error
+    pythonProcess.on('error', (err) => {
+      console.error('Python process error:', err);
+      reject(err);
     });
   });
 }
