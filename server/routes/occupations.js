@@ -16,4 +16,18 @@ const Occupation = require('../models/Occupation.js');
     }
   });
 
+  // get the Occupation data by it name
+  router.get('/', async (req, res) => {
+    mongoose.connect(process.env.MONGO_URL);
+    const {name} =  req.query;
+    try {
+        const data = await Occupation.findOne({name});
+        res.json(data);
+    } catch (err) {
+      console.log(err);
+      res.status(500).json({ error: 'Internal server error' });
+    }
+  });
+
+
   module.exports = router;
