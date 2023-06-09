@@ -1,10 +1,12 @@
 import {useContext, useState, useEffect} from "react";
 import axios from "axios";
 import {UserContext} from "../UserContext";
+import {Navigate, Link} from "react-router-dom";
 
 export default function ResultsPage() {
     const {ready, user} = useContext(UserContext);
-    const [results, setResults] = useState([])
+    const [results, setResults] = useState([]);
+    const [resToPass,setResToPass] = useState(null);
 
 
     async function getRecommendation(user_answers) {
@@ -31,6 +33,27 @@ export default function ResultsPage() {
         }
     }
 
+    const handleTabClick = (result) => {
+        setResToPass(result);
+    };
+
+    const Tab = ({ res, onClick }) => {
+        const tabStyle = {
+          backgroundColor: 'white',
+          padding: '10px',
+          border: '1px solid gray',
+          cursor: 'pointer',
+          marginRight: '20px',
+          width: '200px'
+        };
+      
+        return (
+          <div style={tabStyle} onClick={onClick}>
+            {res}
+          </div>
+        );
+    };
+
     useEffect(() => {
         if (ready && user) {
             async function getAnswers() {
@@ -50,6 +73,7 @@ export default function ResultsPage() {
             getAnswers();
         }   
     }, [ready, user]);
+
 
     if (!ready || !user) {
         return (<div className="d-flex flex-column align-items-center justify-content-center mt-40">
@@ -77,10 +101,19 @@ export default function ResultsPage() {
        );
     }
 
+
+    if (resToPass) {
+        return <Navigate to={'/job'} state={{occupation_title : resToPass}}/>;
+    }
+
     
     return (
-        <div className="text-center max-w-lg mx-auto mt-10">
-            RESULTS
+        <div className="card-deck mt-40">
+              {results.map((result) => (
+                  <div className="card border-success mb-3 text-center shadow-md shadow-gray-300" style={{width: "150px", height: "200px", cursor: 'pointer'}} onClick={() => handleTabClick(result)}>
+                      <p className="card-text font-bold mt-14">{result}</p>
+                  </div>
+              ))}
         </div>
     );
 }
