@@ -19,9 +19,11 @@ const Occupation = require('../models/Occupation.js');
   // get the Occupation data by it name
   router.get('/', async (req, res) => {
     mongoose.connect(process.env.MONGO_URL);
-    const {name} =  req.query;
+    const {Description} =  req.query;
     try {
-        const data = await Occupation.findOne({name});
+        console.log(Description)
+        const data = await Occupation.findOne({Description});
+        console.log(data)
         res.json(data);
     } catch (err) {
       console.log(err);

@@ -6,7 +6,7 @@ import {Navigate, Link} from "react-router-dom";
 export default function ResultsPage() {
     const {ready, user} = useContext(UserContext);
     const [results, setResults] = useState([]);
-    const [resToPass,setResToPass] = useState(null);
+    const [occToPass,setOccToPass] = useState(null);
 
 
     async function getRecommendation(user_answers) {
@@ -33,8 +33,19 @@ export default function ResultsPage() {
         }
     }
 
-    const handleTabClick = (result) => {
-        setResToPass(result);
+    async function handleTabClick(occupName) {
+        try {
+            console.log("in onclick");
+            console.log(occupName);
+            const {data} = await axios.get("/api/occupations", { 
+                params: { Description: occupName } 
+            });
+            const occupCode = data.Code;
+            console.log(data);
+            setOccToPass([occupName, occupCode]);
+        } catch (e) {
+            console.log(e);
+        }
     };
 
     const Tab = ({ res, onClick }) => {
@@ -102,18 +113,27 @@ export default function ResultsPage() {
     }
 
 
-    if (resToPass) {
-        return <Navigate to={'/job'} state={{occupation_title : resToPass}}/>;
+    if (occToPass) {
+        const id = occToPass[1]; // occupation code
+        console.log(id);
+        return <Navigate to={'/job/'+id} state={{occupation_title : occToPass}}/>;
     }
 
     
     return (
-        <div className="card-deck mt-40">
-              {results.map((result) => (
-                  <div className="card border-success mb-3 text-center shadow-md shadow-gray-300" style={{width: "150px", height: "200px", cursor: 'pointer'}} onClick={() => handleTabClick(result)}>
-                      <p className="card-text font-bold mt-14">{result}</p>
-                  </div>
-              ))}
+        <div className="mt-20">
+            <div className="text-center">
+                <h1 className="text-4xl font-bold tracking-tight text-gray-900 sm:text-6xl">
+                    Your Recommendations:
+                </h1>
+            </div>
+            <div className="card-deck mt-20">
+                {results.map((result) => (
+                    <div className="card border-success mb-3 text-center shadow-md shadow-gray-300" style={{width: "150px", height: "200px", cursor: 'pointer'}} onClick={() => handleTabClick(result)}>
+                        <p className="card-text font-bold mt-14">{result}</p>
+                    </div>
+                ))}
+            </div>
         </div>
     );
 }
