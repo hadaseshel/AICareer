@@ -60,7 +60,7 @@ function App() {
             <Route path="/admin" element={<AdminPage />} />
             <Route path="/questionnaire" element={<QuestionsPage />} />
             <Route path="/results" element={<ResultsPage />} />
-            <Route path="/job" element={<JobPage />} />
+            <Route path="/job/:id" element={<JobPage />} />
           </Route>   
         </Routes>
       </UserContextProvider>
