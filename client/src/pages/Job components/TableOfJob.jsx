@@ -4,20 +4,21 @@ import "./TableOfJob.css";
 import { ProgressBar } from "react-bootstrap";
 
 export const Table = ({ rows, firstTh, secondTh, thirdTh}) => {
+
   return (
     <div>
       <table className="table">
         <thead>
           <tr>
             <th className="">{thirdTh}</th>
-            <th className="" >{firstTh}</th>
-            <th className="expand">{secondTh}</th>
+            <th className="expand" >{firstTh}</th>
           </tr>
         </thead>
         <tbody>
           {rows.map((row, idx) => {
+            if (row.Importance > 30) {
             return (
-              <tr key={idx}>
+              <tr key={idx} data-toggle="modal" data-target={"#"+row.name}>
                 <td className="">
                   <span className="">
                     <ProgressBar style={{width: 100, height: 15}} striped variant="success" now={row.Importance} text={row.Importance}>
@@ -25,14 +26,29 @@ export const Table = ({ rows, firstTh, secondTh, thirdTh}) => {
                     </ProgressBar>
                   </span>
                 </td>
-                <td className="">
+                <td className="expand">
                   {row.name}
                 </td>
-                <td className="expand">
-                  {row.description}
-                </td>
+                <div class="modal fade overflow" id={row.name} tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                  <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                      <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">{row.name}</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                          <span aria-hidden="true">&times;</span>
+                        </button>
+                      </div>
+                      <div class="modal-body">
+                        {row.description}
+                      </div>
+                      <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
               </tr>
-            );
+            );}
           })}
         </tbody>
       </table>

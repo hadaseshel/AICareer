@@ -1,13 +1,14 @@
 import { useState, useEffect } from "react";
+import {useParams,Link} from "react-router-dom";
 import axios from "axios";
 
 import { Table } from "./Job components/TableOfJob";
 
 export default function JobPage() {
-    const occupationName = "Recreational Vehicle Service Technicians"
+    const {id} = useParams();
+    const [occupationName, setOccupationName] = useState("");
     const [occupation, setOccupation] = useState({});
     const [isLoading, setIsLoading] = useState(0);
-    const [rowsTasks, setRowsTasks] = useState([]);
     const [rowsWorkActivities, setRowsWorkActivitie] = useState([]);
     const [rowsKnowledge, setRowsKnowledge] = useState([]);
     const [rowsSkills, setRowsSkills] = useState([]);
@@ -15,16 +16,9 @@ export default function JobPage() {
     useEffect(() => {
         async function fetchOccupation() {
             try {
-                const {data} = await axios.get("/api/occupations", { params: { Description:  occupationName} });
+                const {data} = await axios.get("/api/occupations/Code", { params: { Code:  id} });
                 setOccupation(data);
-                const tasks = data.Tasks;
-                const rowTasks = tasks.map(item => ({
-                    _id: item._id,
-                    Importance: item.Importance,
-                    name: item.Category,         // Rename "Category" field to "name"
-                    description: item.Task       // Rename "Task" field to "Description"
-                }));
-                setRowsTasks(rowTasks);
+                setOccupationName(data.Description)
                 const work_activities = data.Work_Activities;
                 const rowWork_activitiess = work_activities.map(item => ({
                     _id: item._id,
@@ -68,20 +62,29 @@ export default function JobPage() {
                 </div>
             </div>
         );
-      }
+    }
+
+    if (occupation == null) {
+        return(
+            <div className="mx-auto max-w-2xl py-16 sm:py-32 lg:py-38">
+                <div className="text-center">
+                    <h1 className="text-4xl font-bold tracking-tight text-gray-900 sm:text-6xl">
+                       Oops! <br></br> This page is not available
+                    </h1>
+                    <p className="mt-6 text-xl leading-8 text-gray-800">
+                       <Link className="custom-link" to={'/'}>Back Home</Link>
+                    </p>
+                </div>
+            </div>
+          );
+    }
     
-      return (
+    return (
         <div>
              <div className="mt-16">
                 <h1 className="text-4xl font-bold tracking-tight text-gray-900 sm:text-5xl text-center">
                     {occupationName}
                 </h1>
-            </div>
-            <div className="mt-16">
-                <h1 className="title text-4xl font-bold tracking-tight text-gray-900 sm:text-4xl text-center">
-                    Tasks
-                </h1>
-                <Table rows={rowsTasks} firstTh={"Category"} secondTh={"Task"} thirdTh={"Importance"}/>
             </div>
             <div className="mt-16">
                 <h1 className="title text-4xl font-bold tracking-tight text-gray-900 sm:text-4xl text-center">
@@ -102,5 +105,5 @@ export default function JobPage() {
                 <Table rows={rowsKnowledge} firstTh={"Knowledge"} secondTh={"Description"} thirdTh={"Importance"}/>
             </div>
         </div>
-      );
+    );
 }

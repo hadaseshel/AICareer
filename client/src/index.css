@@ -25,12 +25,12 @@ button.primary{
 }
 
 .custom-link:hover {
-    color:rgb(38, 156, 71);
+    color: #198754;
     text-decoration: none;
 }
 
 .countNumber{
-    color:rgb(38, 156, 71);
+    color: #198754;
     display: flex;
     align-items: center;
     justify-content: center
@@ -43,6 +43,6 @@ button.primary{
 }
 
 .title{
-    color:rgb(38, 156, 71);
+    color: #198754;
 }
 
