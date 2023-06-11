@@ -5,31 +5,31 @@ import { ProgressBar } from "react-bootstrap";
 
 export const Table = ({ rows, firstTh, secondTh, thirdTh}) => {
   return (
-    <div className="table-wrapper">
+    <div>
       <table className="table">
         <thead>
           <tr>
-            <th>{firstTh}</th>
+            <th className="">{thirdTh}</th>
+            <th className="" >{firstTh}</th>
             <th className="expand">{secondTh}</th>
-            <th>{thirdTh}</th>
           </tr>
         </thead>
         <tbody>
           {rows.map((row, idx) => {
             return (
               <tr key={idx}>
-                <td>
-                  {row.name}
-                </td>
-                <td className="expand">
-                  {row.description}
-                </td>
-                <td className="fit">
-                  <span className="actions">
+                <td className="">
+                  <span className="">
                     <ProgressBar style={{width: 100, height: 15}} striped variant="success" now={row.Importance} text={row.Importance}>
                         <ProgressBar striped variant="success" now={row.Importance} text={row.Importance}/> 
                     </ProgressBar>
                   </span>
+                </td>
+                <td className="">
+                  {row.name}
+                </td>
+                <td className="expand">
+                  {row.description}
                 </td>
               </tr>
             );

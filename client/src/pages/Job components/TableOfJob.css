@@ -1,64 +1,81 @@
+.table {
+  table-layout: fixed;
+  display: block;
+  border-collapse: collapse;
+  box-shadow: 0px 10px 10px #ccc;
+  border-radius: 10px;
+  white-space: nowrap;
+  width: 100em;
+  max-width: 100%;
+}
+
+.table thead {
+  background-color: #ccc;
+  color: #222;
+}
+
+.table th,
+.table td {
+  padding: 0.8rem;
+}
+
+.table td {
+  border-top: 0.5px solid #ddd;
+  text-align: left;
+}
+
+.table tbody tr:hover {
+  background-color:#ddd;
+}
+
+.expand {
+  width: 100%;
+}
+
 .table-wrapper {
-    width: 100%;
-  }
-  
-  .table {
-    display: block;
-    overflow: hidden;
-    table-layout: fixed;
-    border-collapse: collapse;
-    box-shadow: 0px 10px 10px #ccc;
-    border-radius: 10px;
-    white-space: nowrap;
-    width: 100em;
-    max-width: 80%;
-    margin: auto;
-    table-layout: auto;
-    overflow-x: auto;
-  }
-  
-  .table thead {
-    background-color: #ccc;
-    color: #222;
-  }
-  
-  .table th,
-  .table td {
-    padding: 0.8rem;
-  }
-  
-  .table td {
-    border-top: 0.5px solid #ddd;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    text-align: center;
-    vertical-align: middle;
-  }
-  
-  .table tbody tr:hover {
-    /* background-color: #eee; */
-    background-color:#ddd;
-  }
-  
-  .expand {
-    width: 100%;
-  }
-  
-  .label {
-    border-radius: 3px;
-    padding: 0.3rem;
-    color: white;
-  }
-  
-  .actions {
-    display: flex;
-    justify-content: space-around;
-  }
-  
-  .actions svg {
-    cursor: pointer;
-  }
-  
-  .delete-btn {
-    color: #e10d05;
-  }
+  width: 100%;
+  overflow-x: auto;
+  max-width: 100%;
+}
+
+.table {
+  table-layout: fixed;
+  border-collapse: collapse;
+  box-shadow: 0px 10px 10px #ccc;
+  border-radius: 10px;
+  white-space: nowrap;
+  width: 100%;
+}
+
+.table thead {
+  background-color: #ccc;
+  color: #222;
+}
+
+.table th,
+.table td {
+  padding: 0.8rem;
+}
+
+.table td {
+  border-top: 0.5px solid #ddd;
+  text-align: left;
+}
+
+.table tbody tr:hover {
+  background-color: #ddd;
+}
+
+.third-th,
+.first-th,
+.second-th {
+  width: 20%;
+}
+
+.third-td,
+.first-td,
+.second-td {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
