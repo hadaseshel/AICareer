@@ -6,7 +6,7 @@
   border-radius: 10px;
   white-space: nowrap;
   width: 100em;
-  max-width: 100%;
+  max-width: fit-content;
 }
 
 .table thead {
@@ -28,54 +28,6 @@
   background-color:#ddd;
 }
 
-.expand {
-  width: 100%;
-}
-
-.table-wrapper {
-  width: 100%;
-  overflow-x: auto;
-  max-width: 100%;
-}
-
-.table {
-  table-layout: fixed;
-  border-collapse: collapse;
-  box-shadow: 0px 10px 10px #ccc;
-  border-radius: 10px;
-  white-space: nowrap;
-  width: 100%;
-}
-
-.table thead {
-  background-color: #ccc;
-  color: #222;
-}
-
-.table th,
-.table td {
-  padding: 0.8rem;
-}
-
-.table td {
-  border-top: 0.5px solid #ddd;
-  text-align: left;
-}
-
-.table tbody tr:hover {
-  background-color: #ddd;
-}
-
-.third-th,
-.first-th,
-.second-th {
-  width: 20%;
-}
-
-.third-td,
-.first-td,
-.second-td {
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
+.overflow{
+  overflow-y: auto;;
 }
