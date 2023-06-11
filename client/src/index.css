@@ -15,8 +15,8 @@ button{
     @apply bg-gray-300;
 }
 button.primary{
-    background-color: #ca3c9f;
-    @apply p-2 w-full text-black rounded-2xl;
+    background-color: 	#198754;
+    @apply p-2 w-full text-white rounded-2xl;
 }
 
 .custom-link {

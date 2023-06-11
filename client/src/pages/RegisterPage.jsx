@@ -6,10 +6,18 @@ export default function RegisterPage() {
     const [name, setName] = useState('')
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
+    const [isValidReg, setIsValidReg] = useState(true)
+    const [isRegistered, setIsRegistered] = useState(false)
+
 
 
     async function registerUser(ev) {
          ev.preventDefault();
+         if (name === "" || email === "" || password === "") {
+            setIsValidReg(false);
+            setIsRegistered(false);
+            return;
+        }
          try {
            await axios.post('/api/user/register', {
              name,
@@ -18,17 +26,21 @@ export default function RegisterPage() {
              type:'normal',
              answered: 0
            });
-           alert('Registration successful. Now you can log in');
+           setIsValidReg(true);
+           setIsRegistered(true);
          } catch (e) {
-           alert('Registration failed. Maybe the email is already in use');
+            setIsValidReg(false);
+            setIsRegistered(false);
          }
     }
 
     return (
-        <div className="mt-4 grow flex items-center justify-around">
-            <div className="mb-64">
-                <h1 className="text-4xl text-center mb-4">Register</h1>
-                <form className="max-w-md mx-auto" onSubmit={registerUser}>
+        <div className="mx-auto max-w-2xl py-16 sm:py-32 lg:py-38">
+            <div className="text-center">
+                <h1 className="text-4xl font-bold tracking-tight text-gray-900 sm:text-6xl">
+                    Register
+                </h1>
+                <form className="max-w-md mx-auto mt-10" onSubmit={registerUser}>
                     <input type="text"
                         placeholder="Full Name"
                         value={name}
@@ -42,6 +54,16 @@ export default function RegisterPage() {
                         value={password}
                         onChange={ev => setPassword(ev.target.value)} />
                     <button className="primary">Register</button>
+                    {!isValidReg && (
+                        <div className="text-center py-2 text-red-500">
+                            Registration Failed
+                        </div>
+                    )}
+                    {!!isRegistered && (
+                        <div className="text-center py-2 text-green-500">
+                            Registration successful. Now you can log in
+                        </div>
+                    )}
                     <div className="text-center py-2 text-gray-500">
                         Already have an account? <Link className="underline text-black" to={'/login'}>Login</Link>
                     </div>

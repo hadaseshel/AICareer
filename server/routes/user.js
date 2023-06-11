@@ -34,8 +34,11 @@ router.post('/register', async (req,res) => {
 router.post('/login', async (req,res) => {
     mongoose.connect(process.env.MONGO_URL);
     const {email,password} = req.body;
+    console.log(email);
+    console.log(password);
     const userDoc = await User.findOne({email});
-    if (userDoc) {
+    console.log(userDoc);
+    if (userDoc !== null) {
       const passOk = bcrypt.compareSync(password, userDoc.password);
       if (passOk) {
         jwt.sign({
@@ -49,7 +52,7 @@ router.post('/login', async (req,res) => {
         res.status(422).json('pass not ok');
       }
     } else {
-      res.json('not found');
+      res.status(422).json('not found');
     }
 });
 
