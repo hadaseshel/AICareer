@@ -8,6 +8,7 @@ import ProfilePage from "./pages/ProfilePage";
 import AdminPage from './pages/AdminPage';
 import ResultsPage from './pages/ResultsPage';
 import JobPage from './pages/JobPage';
+import NotFoundPage from './pages/NotFoundPage';
 import {Route, Routes} from "react-router-dom";
 import axios from "axios";
 import {UserContextProvider} from "./UserContext";
@@ -61,6 +62,8 @@ function App() {
             <Route path="/questionnaire" element={<QuestionsPage />} />
             <Route path="/results" element={<ResultsPage />} />
             <Route path="/job/:id" element={<JobPage />} />
+            <Route path="/notfound" element={<NotFoundPage />} />
+            <Route path="*" element={<NotFoundPage />} />
           </Route>   
         </Routes>
       </UserContextProvider>
