@@ -7,7 +7,7 @@ export const Table = ({ rows, firstTh, secondTh, thirdTh}) => {
 
   return (
     <div>
-      <table className="mytable">
+      <table className="table">
         <thead>
           <tr>
             <th className="">{thirdTh}</th>
