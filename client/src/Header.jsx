@@ -41,7 +41,3 @@ export default function Header() {
     </header>
   );
 }
-
-//{user != null && (user.type === 'admin') && (
-//<Link className="underline text-black" to={'/admin'}>Admin Area</Link>
-  //)}
