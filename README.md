@@ -1,6 +1,6 @@
 # AICareer
 
-## Client:
+## Client
 
 To run client run this command:
 ### `npm start`
