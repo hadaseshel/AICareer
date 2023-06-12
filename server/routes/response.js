@@ -25,8 +25,6 @@ router.post('/', async (req,res) => {
 router.get('/', async (req,res) => {
     mongoose.connect(process.env.MONGO_URL);
     const {user_id} = req.query;
-    console.log("user_id:")
-    console.log(user_id)
     try {
       const responseDoc = await Response.findOne({user_id});
       res.json(responseDoc);

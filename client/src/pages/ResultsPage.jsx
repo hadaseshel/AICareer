@@ -22,9 +22,7 @@ export default function ResultsPage() {
                 setResults(user_results);
             }
             else {
-                console.log("IN GET REC");
                 const {data} = await axios.get('/api/recommend', {params: {user_id: user._id, user_answers: user_answers}});
-                console.log(data)
                 await axios.post('/api/recommend/result', {user_id: user._id, results: data.recommendations});
                 setResults(data.recommendations);
             }
@@ -35,13 +33,10 @@ export default function ResultsPage() {
 
     async function handleTabClick(occupName) {
         try {
-            console.log("in onclick");
-            console.log(occupName);
             const {data} = await axios.get("/api/occupations", { 
                 params: { Description: occupName } 
             });
             const occupCode = data.Code;
-            console.log(data);
             setOccToPass([occupName, occupCode]);
         } catch (e) {
             console.log(e);
@@ -70,13 +65,10 @@ export default function ResultsPage() {
             async function getAnswers() {
                 
                 try {
-                    console.log("IN GET ANSWERS");
-                    console.log(user._id);
                     const response = await axios.get("/api/response", {
                         params: { user_id: user._id },
                     });
                     if (response.data === null) {
-                        console.log("in null");
                         setIsAnswered(false);
                         return;
                     }
@@ -135,7 +127,6 @@ export default function ResultsPage() {
 
     if (occToPass) {
         const id = occToPass[1]; // occupation code
-        console.log(id);
         return <Navigate to={'/job/'+id}/>;
     }
     
@@ -162,28 +153,3 @@ export default function ResultsPage() {
         </div>
     );
 }
-
-
-
-
-
-// <div className="mt-8 grid gap-x-6 gap-y-8 grid-cols-2 md:grid-cols-3 lg:grid-cols-3">
-//   {results.map((result, index) => (
-//     <div
-//       className="card border-success mb-3 text-center shadow-md shadow-gray-300"
-//       style={{
-//         width: "180px",
-//         height: "180px",
-//         cursor: 'pointer',
-//         justifySelf: 'center' // Center the grid item horizontally
-//       }}
-//       onClick={() => handleTabClick(result)}
-//       key={index}
-//     >
-//       <div className="card-key bg-white border-2 border-custom-green rounded-full flex items-center justify-center w-12 h-12 mx-auto mt-3">
-//         <p className="card-key-text font-bold text-custom-green text-xl mt-3">{index + 1}</p>
-//       </div>
-//       <p className="card-text font-bold">{result}</p>
-//     </div>
-//   ))}
-// </div>

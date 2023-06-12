@@ -21,9 +21,7 @@ const Occupation = require('../models/Occupation.js');
     mongoose.connect(process.env.MONGO_URL);
     const {Description} =  req.query;
     try {
-        console.log(Description)
         const data = await Occupation.findOne({Description});
-        console.log(data)
         res.json(data);
     } catch (err) {
       console.log(err);
@@ -36,9 +34,7 @@ const Occupation = require('../models/Occupation.js');
     mongoose.connect(process.env.MONGO_URL);
     const {Code} =  req.query;
     try {
-        console.log(Code)
         const data = await Occupation.findOne({Code});
-        console.log(data)
         res.json(data);
     } catch (err) {
       console.log(err);

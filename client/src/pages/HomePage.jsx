@@ -102,7 +102,6 @@ export default function HomePage() {
     },[]);
 
     // if we didn't load all the data
-    console.log(isLoading)
     if (isLoading != 1) {
         return(
             <div className="mx-auto max-w-2xl py-16 sm:py-32 lg:py-38">

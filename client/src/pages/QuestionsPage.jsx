@@ -59,13 +59,6 @@ export default function QuestionsPage() {
             console.log(e)
             return;
         }
-        // try {
-        //     await axios.put('/api/useranswered', {user_id: user._id});
-        //     setRedirect(true);
-        // } catch (e) {
-        //     alert('Response failed');
-        //     console.log(e)
-        // }
     };
 
 

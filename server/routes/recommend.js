@@ -49,7 +49,6 @@ router.get('/', async (req, res) => {
 
     // Get the fields we want to insert to the data we send to recommendation system
     try {
-      console.log("TRY 1")
         const one_document = await DatasetResponse.findOne()
         const fields_to_filter = ["occupationcode", "_id"]
         mappedFields = Object.keys(one_document._doc)
@@ -142,40 +141,5 @@ function callPythonScript(data, user_id, user_answers) {
     });
   });
 }
-
-// option to try2
-// var responses = {}
-      // const cursor = DatasetResponse.find({}).lean().cursor();
-      // //const responses = {};
-
-      // let count = 0; // Counter for the fetched documents
-
-      // cursor.on('data', (document) => {
-      //   // Perform your desired action on each document
-      //   const mappedFieldsData = {};
-      //   mappedFields.forEach((field) => {
-      //       mappedFieldsData[field] = document[field];
-      //   });
-      //   responses[document._id] = mappedFieldsData;
-
-      //   count++;
-
-      //   if (count >= limit) {
-      //     cursor.close(); // Close the cursor if the limit is reached
-      //   }
-      // });
-
-      // cursor.on('end', () => {
-      //   callPythonScript(responses, user_id, user_answers)
-      //         .then((recommendations) => {
-      //             res.json({ recommendations });
-      //         })
-      //         .catch((err) => {
-      //             console.log(err);
-      //             res.status(500).json({ error: 'Internal server error' });
-      //         });
-      // });
-      
-
 
 module.exports = router;

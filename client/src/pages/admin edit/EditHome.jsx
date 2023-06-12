@@ -112,7 +112,6 @@ export default function EditHomePage() {
 
      // UPDATE the Values of section to the DB
     async function updadeValues(path, depSection, title, title1, text1, title2, text2, title3, text3) {
-        console.log({depSection, title, title1, text1, title2, text2, title3, text3})
         try {
             await axios.put(path, { 
                 section: depSection,  
