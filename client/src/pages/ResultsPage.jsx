@@ -146,7 +146,7 @@ export default function ResultsPage() {
                             <div className="card-key bg-custom-green text-white rounded-full flex items-center justify-center w-8 h-8 mx-auto mt-3">
                                 <p className="card-key-text font-bold text-xl mt-3">{index + 1}</p>
                             </div>
-                            <p className="card-text font-bold mt-3">{result}</p>
+                            <p className="card-text font-bold mt-3 mr-1 ml-1">{result}</p>
                         </div>
                     ))}
             </div>
