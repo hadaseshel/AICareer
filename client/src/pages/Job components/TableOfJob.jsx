@@ -29,20 +29,20 @@ export const Table = ({ rows, firstTh, secondTh, thirdTh}) => {
                 <td className="expand">
                   {row.name}
                 </td>
-                <div class="modal fade modaldescription" id={row.name} tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                  <div class="modal-dialog" role="document">
-                    <div class="modal-content">
-                      <div class="modal-header text-overlay ">
-                        <h5 class="modal-title overflow" id="exampleModalLabel">{row.name}</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <div className="modal fade modaldescription" id={row.name} tabIndex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                  <div className="modal-dialog" role="document">
+                    <div className="modal-content">
+                      <div className="modal-header text-overlay ">
+                        <h5 className="modal-title overflow" id="exampleModalLabel">{row.name}</h5>
+                        <button type="button" className="close" data-dismiss="modal" aria-label="Close">
                           <span aria-hidden="true">&times;</span>
                         </button>
                       </div>
-                      <div class="modal-body overflow ">
+                      <div className="modal-body overflow ">
                            {row.description}
                       </div>
-                      <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                      <div className="modal-footer">
+                        <button type="button" className="btn btn-secondary" data-dismiss="modal">Close</button>
                       </div>
                     </div>
                   </div>
