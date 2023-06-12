@@ -82,6 +82,9 @@ export default function ResultsPage() {
         }   
     }, [ready, user]);
 
+    if (ready && !user ) {
+        return <Navigate to={'/login'} />
+    }
 
     if (!ready || !user) {
         return (<div className="d-flex flex-column align-items-center justify-content-center mt-40">
