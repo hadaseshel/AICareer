@@ -12,6 +12,11 @@ class Recommender:
         self.user_response_proff_matrix = pd.DataFrame()
         self.user_response_matrix = pd.DataFrame()
 
+    def remove_dup_proff(self, proffesions):
+        seen = set()
+        seen_add = seen.add
+        return [x for x in proffesions if not (x in seen or seen_add(x))]
+
     def fit(self, matrix, user_id, user_answers):
         self.user_response_proff_matrix = matrix
         self.user_response_matrix = self.user_response_proff_matrix.drop(['occupation'], axis=1)
@@ -45,10 +50,10 @@ class Recommender:
         similarity_row_after_choice = similarity_row_without_user
 
         # For case that there are duplicate proffesions
-        while len(set(rec_values)) < k:
+        while len(self.remove_dup_proff(rec_values)) < k:
             similarity_row_after_choice = similarity_row_after_choice.drop(top_k, axis=1)
             top_k = similarity_row_after_choice.iloc[0].nlargest(1).index
             new_rec_value = self.user_response_proff_matrix.loc[top_k, 'occupation'].tolist()
             rec_values = rec_values + new_rec_value
 
-        return list(set(rec_values))
+        return self.remove_dup_proff(rec_values)

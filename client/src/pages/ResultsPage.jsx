@@ -7,6 +7,7 @@ export default function ResultsPage() {
     const {ready, user} = useContext(UserContext);
     const [results, setResults] = useState([]);
     const [occToPass,setOccToPass] = useState(null);
+    const [isAnswered,setIsAnswered] = useState(true);
 
 
     async function getRecommendation(user_answers) {
@@ -17,7 +18,6 @@ export default function ResultsPage() {
                 params: { user_id: user._id },
             });
             if (data) {
-                console.log(data);
                 const user_results = data.results;
                 setResults(user_results);
             }
@@ -75,6 +75,11 @@ export default function ResultsPage() {
                     const response = await axios.get("/api/response", {
                         params: { user_id: user._id },
                     });
+                    if (response.data === null) {
+                        console.log("in null");
+                        setIsAnswered(false);
+                        return;
+                    }
                     const user_answers = response.data.user_answers;
                     getRecommendation(user_answers);
                 } catch (e) {
@@ -98,6 +103,21 @@ export default function ResultsPage() {
                 </div>);
     }
 
+    if (!isAnswered) {
+        return(
+            <div className="mx-auto max-w-2xl py-16 sm:py-32 lg:py-38">
+                <div className="text-center">
+                    <h1 className="text-4xl font-bold tracking-tight text-gray-900 sm:text-5xl">
+                        You haven't answered the questionnaire yet
+                    </h1>
+                    <p className="mt-6 text-xl leading-8 text-gray-800">
+                       <Link className="custom-link" to={'/'}>Back Home</Link>
+                    </p>
+                </div>
+            </div>
+          );
+    }
+
     if (results.length < 1) {
         return (
             <div className="d-flex flex-column align-items-center justify-content-center mt-40">
@@ -116,9 +136,8 @@ export default function ResultsPage() {
     if (occToPass) {
         const id = occToPass[1]; // occupation code
         console.log(id);
-        return <Navigate to={'/job/'+id} state={{occupation_title : occToPass}}/>;
+        return <Navigate to={'/job/'+id}/>;
     }
-
     
     return (
         <div className="mt-20">
@@ -127,13 +146,44 @@ export default function ResultsPage() {
                     Your Recommendations:
                 </h1>
             </div>
-            <div className="card-deck mt-20">
-                {results.map((result) => (
-                    <div className="card border-success mb-3 text-center shadow-md shadow-gray-300" style={{width: "150px", height: "200px", cursor: 'pointer'}} onClick={() => handleTabClick(result)}>
-                        <p className="card-text font-bold mt-14">{result}</p>
-                    </div>
-                ))}
+            <div className="mt-20 card-deck">
+                    {results.map((result, index) => (
+                        <div className="card border-success mb-3 text-center shadow-md shadow-gray-300"
+                            style={{width: "150px", height: "150px", cursor: 'pointer'}}
+                            onClick={() => handleTabClick(result)}
+                            key={index}>
+                            <div className="card-key bg-custom-green text-white rounded-full flex items-center justify-center w-8 h-8 mx-auto mt-3">
+                                <p className="card-key-text font-bold text-xl mt-3">{index + 1}</p>
+                            </div>
+                            <p className="card-text font-bold mt-3">{result}</p>
+                        </div>
+                    ))}
             </div>
         </div>
     );
 }
+
+
+
+
+
+// <div className="mt-8 grid gap-x-6 gap-y-8 grid-cols-2 md:grid-cols-3 lg:grid-cols-3">
+//   {results.map((result, index) => (
+//     <div
+//       className="card border-success mb-3 text-center shadow-md shadow-gray-300"
+//       style={{
+//         width: "180px",
+//         height: "180px",
+//         cursor: 'pointer',
+//         justifySelf: 'center' // Center the grid item horizontally
+//       }}
+//       onClick={() => handleTabClick(result)}
+//       key={index}
+//     >
+//       <div className="card-key bg-white border-2 border-custom-green rounded-full flex items-center justify-center w-12 h-12 mx-auto mt-3">
+//         <p className="card-key-text font-bold text-custom-green text-xl mt-3">{index + 1}</p>
+//       </div>
+//       <p className="card-text font-bold">{result}</p>
+//     </div>
+//   ))}
+// </div>
