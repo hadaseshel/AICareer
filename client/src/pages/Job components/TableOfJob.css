@@ -1,12 +1,17 @@
+.overflow {
+  display: flex !important;
+  height: fit-content !important;
+  max-height: fit-content!important;
+  overflow-y: auto !important;
+  width: 100% !important;
+  max-width: 100% !important;
+}
+
 .table {
-  table-layout: fixed;
-  display: block;
-  border-collapse: collapse;
   box-shadow: 0px 10px 10px #ccc;
   border-radius: 10px;
-  white-space: nowrap;
-  width: 100em;
-  max-width: fit-content;
+  width: 100%;
+  white-space: normal !important;
 }
 
 .table thead {
@@ -26,8 +31,4 @@
 
 .table tbody tr:hover {
   background-color:#ddd;
-}
-
-.overflow{
-  overflow-y: auto;;
 }

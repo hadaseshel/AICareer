@@ -7,7 +7,7 @@ export const Table = ({ rows, firstTh, secondTh, thirdTh}) => {
 
   return (
     <div>
-      <table className="table">
+      <table className="mytable">
         <thead>
           <tr>
             <th className="">{thirdTh}</th>
@@ -29,17 +29,17 @@ export const Table = ({ rows, firstTh, secondTh, thirdTh}) => {
                 <td className="expand">
                   {row.name}
                 </td>
-                <div class="modal fade overflow" id={row.name} tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal fade modaldescription" id={row.name} tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
                   <div class="modal-dialog" role="document">
                     <div class="modal-content">
-                      <div class="modal-header">
-                        <h5 class="modal-title" id="exampleModalLabel">{row.name}</h5>
+                      <div class="modal-header text-overlay ">
+                        <h5 class="modal-title overflow" id="exampleModalLabel">{row.name}</h5>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                           <span aria-hidden="true">&times;</span>
                         </button>
                       </div>
-                      <div class="modal-body">
-                        {row.description}
+                      <div class="modal-body overflow ">
+                           {row.description}
                       </div>
                       <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
