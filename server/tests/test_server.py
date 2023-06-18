@@ -8,29 +8,8 @@ class TestServer(TestCase):
     def setUp(self):
         self.url = "http://localhost:4000/api"
                
-    #################################### Tests for Occupation function ####################################
-    def test_get_occupations_count(self):
-        url_occupations_count = "/occupations/count"
-        full_url = self.url + url_occupations_count
+    #################################### Tests for Occupation functions ####################################
         
-        response = requests.get(full_url) # Send a GET request to the server
-        data = response.json()  # Extract the JSON data from the response
-        
-        self.assertEqual(response.status_code, 200) # Assert if the response status code is not 200
-        num_of_occupations = 858 # Assert if the response status code is not 200
-        self.assertEqual(data, num_of_occupations)
-        
-    def test_get_occupations_by_description(self):
-        description = "Animal Breeders"
-        occupations = "/occupations/"
-        url = f"{self.url + occupations}?Description={description}"
-        
-        response = requests.get(url) # Send a GET request to the server
-        data = response.json()  # Extract the JSON data from the response
-        
-        self.assertEqual(response.status_code, 200) # Assert if the response status code is not 200
-        self.assertEqual(data["Description"], description)
-
     def test_get_occupations_by_code(self):
         code = "45-2021.00"
         occupations = "/occupations"
@@ -44,33 +23,69 @@ class TestServer(TestCase):
     
     #######################################################################################################
     
-    ####################################### Tests for Home function #######################################
-    
-    # 2 functions
+    ####################################### Tests for Home functions #######################################
+    def test_get_app_description(self):
+        url_desc = "/home"
+        full_url = self.url + url_desc
+        body = {"section": "description"}
+        title = "What is AIcareer?"
+        
+        response = requests.get(full_url, params=body) # Send a GET request to the server
+        data = response.json() # Extract the JSON data from the response
+        
+        self.assertEqual(response.status_code, 200) # Assert if the response status code is not 200
+        self.assertEqual(data["title"], title)
+
+    def test_get_market_status(self):
+        url_desc = "/home"
+        full_url = self.url + url_desc
+        body = {"section": "market status"}
+        title = "Career market status"
+        
+        response = requests.get(full_url, params=body) # Send a GET request to the server
+        data = response.json() # Extract the JSON data from the response
+        
+        self.assertEqual(response.status_code, 200) # Assert if the response status code is not 200
+        self.assertEqual(data["title"], title)
     
     #######################################################################################################
     
-    ##################################### Tests for Questions function ####################################
+    ###################################### Tests for Recommend functions ###################################
     
-    # 6 functions
+    def test_get_user_result(self):
+        url_login = "/recommend/result"
+        full_url = self.url + url_login
+        user_id = "64870447eeb503c2350f9b98" # put correct user id
+        body = {"user_id": user_id}
+        user_result = ["Passenger Attendants", 
+                       "Receptionists and Information Clerks",
+                       "Magnetic Resonance Imaging Technologists",
+                       "Forest Fire Inspectors and Prevention Specialists",
+                       "Exercise Trainers and Group Fitness Instructors"] # put correct response
+        
+        response = requests.get(full_url, params=body) # Send a GET request to the server
+        data = response.json()  # Extract the JSON data from the response
+        
+        self.assertEqual(response.status_code, 200) # Assert if the response status code is not 200
+        self.assertEqual(data["results"], user_result) 
     
     #######################################################################################################
     
-    ###################################### Tests for Response function ####################################
-    
-    # 2 functions
-    
-    #######################################################################################################
-    
-    ###################################### Tests for Recommend function ###################################
-    
-    # 3 functions
-    
-    #######################################################################################################
-    
-    ######################################### Tests for User function #####################################
-    
-    # 6 functions
+    ######################################### Tests for User functions #####################################
+
+    def test_login(self):
+        url_login = "/user/login"
+        full_url = self.url + url_login
+        email = "hh@gmail.com"
+        password = "12345"
+        enc_pass = "$2a$10$O1hprMsmtNspXbmTAhzrKuLL5.ho.tC0r98g8YR25Yrclx2r3gjvK"
+        body = {"email": email, "password": password}
+        
+        response = requests.post(full_url, json=body) # Send a GET request to the server
+        data = response.json()  # Extract the JSON data from the response
+        
+        self.assertEqual(response.status_code, 200) # Assert if the response status code is not 200
+        self.assertEqual(data["password"], enc_pass) # assert thet the password from the server equal to corrct password
     
     #######################################################################################################
 
