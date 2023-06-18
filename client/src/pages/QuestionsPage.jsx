@@ -14,7 +14,6 @@ export default function QuestionsPage() {
     const [redirect, setRedirect] = useState(false);
 
 
-
     useEffect(() => {
         async function fetchQuestions() {
             try {
@@ -39,6 +38,18 @@ export default function QuestionsPage() {
     const handlePrevious = () => {
         setCurrentQuestionIndex((prevIndex) => prevIndex === 0 ? prevIndex : prevIndex - 1);
     };
+
+    async function getIsAnswered() {
+        try {
+            const {data} = await axios.get('/api/user', { params: {user_id: user._id} });
+            if (data && data.answered === 1) {
+                setRedirect(true);
+            } 
+        } catch (e) {
+            console.log(e)
+            return;
+        }
+    }
 
     async function handleSubmit()  {
         const user_answers = [];
@@ -87,10 +98,17 @@ export default function QuestionsPage() {
         return <Navigate to={'/login'} />
     }
 
+
+
     if (redirect || user.answered === 1) {
         return <Navigate to={'/results'} />
+    } 
+
+    if (Object.keys(answers).length === 0){
+        getIsAnswered();
     }
 
+    
     const currentQuestionData = questions[currentQuestionIndex];
     const { name, description } = currentQuestionData;
 

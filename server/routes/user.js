@@ -84,6 +84,7 @@ router.get('/users', async (req, res) => {
   }
 });
 
+// update the user document if he answered
 router.put('/useranswered', async (req, res) => {
   mongoose.connect(process.env.MONGO_URL);
   try {
@@ -95,6 +96,17 @@ router.put('/useranswered', async (req, res) => {
   }
 });
 
+// get user by user id
+router.get('/', async (req, res) => {
+  try {
+    const {user_id} = req.query;
+    const updatedUser = await User.findOne({_id: user_id });
+    res.json(updatedUser);
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
 
 
 module.exports = router;
