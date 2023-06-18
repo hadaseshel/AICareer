@@ -58,6 +58,18 @@ button.primary{
     background-color: #198754;
   }
   
+  .result-card-text {
+    display: -webkit-box;
+    -webkit-line-clamp: 4; /* Set the desired number of lines */
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .result-card {
+    overflow: hidden;
+  }
+  
   
   
   

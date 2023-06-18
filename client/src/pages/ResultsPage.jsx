@@ -142,14 +142,14 @@ export default function ResultsPage() {
             </div>
             <div className="mt-20 card-deck">
                     {results.map((result, index) => (
-                        <div className="card border-success mb-3 text-center shadow-md shadow-gray-300"
+                        <div className="card border-success mb-3 text-center shadow-md shadow-gray-300 result-card"
                             style={{width: "150px", height: "200px", cursor: 'pointer'}}
                             onClick={() => handleTabClick(result)}
                             key={index}>
                             <div className="card-key bg-custom-green text-white rounded-full flex items-center justify-center w-8 h-8 mx-auto mt-3">
                                 <p className="card-key-text font-bold text-xl mt-3">{index + 1}</p>
                             </div>
-                            <p className="card-text font-bold mt-3 mr-1 ml-1">{result}</p>
+                            <p className="card-text font-bold mt-3 mr-1 ml-1 mb-3 result-card-text">{result}</p>
                         </div>
                     ))}
             </div>
