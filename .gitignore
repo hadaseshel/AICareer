@@ -1,8 +1,7 @@
 # See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
 
 # dependencies
-/api/node_modules
-/client/node_modules
+/node_modules
 /.pnp
 .pnp.js
 
@@ -22,6 +21,9 @@
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+<<<<<<< HEAD
 server/cf_model/recommendation_system/__pycache__/collaborative_filtering.cpython-38.pyc
 server/cf_model/recommendation_system/__pycache__/data.cpython-38.pyc
 server/cf_model/recommendation_system/__pycache__/evaluation.cpython-38.pyc
+=======
+>>>>>>> 8f53649b8ce57394f06269cf4f2171b2e88f6d12
